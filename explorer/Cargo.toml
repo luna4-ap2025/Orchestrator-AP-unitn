@@ -1,0 +1,9 @@
+[package]
+name = "explorer"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+common-game = "2.0.0"
+env_logger = "0.11.8"
+crossbeam-channel = "0.5.15"
