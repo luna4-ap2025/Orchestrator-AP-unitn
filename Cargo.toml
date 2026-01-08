@@ -1,6 +1,15 @@
 [package]
-name = "orchestrator_demo"
+name = "Orchestrator"
 version = "0.1.0"
 edition = "2024"
 
 [dependencies]
+common-game = "2.0.0"
+crossbeam-channel = "0.5"
+log = "0.4"
+thiserror = "2.0"
+petgraph = "0.8.3"
+
+[lib]
+name = "Orchestrator"
+path = "src/lib.rs"
