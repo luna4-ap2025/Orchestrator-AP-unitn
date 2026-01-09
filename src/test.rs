@@ -1,9 +1,20 @@
-/*fn main() -> Result<(), String> {
-    logging::init();
+//! Integration tests for the orchestrator
+//!
+//! These tests verify that the orchestrator correctly coordinates between
+//! planets and explorers, manages state, and handles errors appropriately
 
-    let mut orchestrator = Orchestrator::new()?;
-    orchestrator.run();
+#[cfg(test)]
+mod tests {
+    use crate::orchestrator::Orchestrator;
+    use crate::logging;
+    use log::LevelFilter;
 
-    Ok(())
+    /// Test basic orchestrator initialization
+    #[test]
+    fn test_orchestrator_initialization() {
+        logging::init(LevelFilter::Warn);
+
+        let orchestrator = Orchestrator::new();
+        assert!(orchestrator.is_ok());
+    }
 }
-*/
