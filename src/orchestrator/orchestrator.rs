@@ -48,7 +48,7 @@ pub struct Orchestrator {
     gui_command_receiver: Receiver<GuiCommand>,
 
     /// Control flag for graceful shutdown
-    should_stop: Arc<AtomicBool>,
+    pub(crate) should_stop: Arc<AtomicBool>,
 }
 
 impl Orchestrator {
@@ -251,7 +251,7 @@ impl Orchestrator {
     }
 
     /// Send an asteroid to a planet
-    fn send_asteroid_to_planet(&mut self, planet_id: ID) {
+    pub(crate) fn send_asteroid_to_planet(&mut self, planet_id: ID) {
         if let Some(sender) = self.planet_senders.get(&planet_id) {
             let asteroid = self.forge.generate_asteroid();
             if sender.send(OrchestratorToPlanet::Asteroid(asteroid)).is_ok() {
@@ -264,7 +264,7 @@ impl Orchestrator {
     }
 
     /// Send a sunray to a planet
-    fn send_sunray_to_planet(&mut self, planet_id: ID) {
+    pub(crate) fn send_sunray_to_planet(&mut self, planet_id: ID) {
         if let Some(sender) = self.planet_senders.get(&planet_id) {
             let sunray = self.forge.generate_sunray();
             if sender.send(OrchestratorToPlanet::Sunray(sunray)).is_ok() {
@@ -333,7 +333,7 @@ impl Orchestrator {
     }
 
     /// Handle planet death (disconnection)
-    fn handle_planet_death(&mut self, planet_id: ID) {
+    pub(crate) fn handle_planet_death(&mut self, planet_id: ID) {
         log::warn!("Planet {planet_id} appears to be dead, cleaning up");
 
         let explorers_on_planet: Vec<ID> = self.state

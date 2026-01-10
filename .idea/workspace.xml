@@ -11,20 +11,9 @@
     </cargoProject>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="668d04bc-8fc4-424c-8f8d-c6c91eedaeb2" name="Changes" comment="no errors yei">
-      <change afterPath="$PROJECT_DIR$/src/orchestrator/examples/bevy_gui.rs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/orchestrator/gui_interface.rs" afterDir="false" />
+    <list default="true" id="668d04bc-8fc4-424c-8f8d-c6c91eedaeb2" name="Changes" comment="hehe">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Cargo.lock" beforeDir="false" afterPath="$PROJECT_DIR$/Cargo.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Cargo.toml" beforeDir="false" afterPath="$PROJECT_DIR$/Cargo.toml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/lib.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/logging.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/logging.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/orchestrator/explorer_control.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/orchestrator/explorer_control.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/orchestrator/mod.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/orchestrator/mod.rs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/orchestrator/orchestrator.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/orchestrator/orchestrator.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/orchestrator/planet_control.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/orchestrator/planet_control.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/orchestrator/routing.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/orchestrator/routing.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/orchestrator/state.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/orchestrator/state.rs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/test.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/test.rs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -52,7 +41,7 @@
   <component name="GithubPullRequestsUISettings"><![CDATA[{
   "selectedUrlAndAccountId": {
     "url": "https://github.com/luna4-ap2025/Orchestrator.git",
-    "accountId": "d51acea7-5783-4e83-8445-c53f5ff034c9"
+    "accountId": "5e223cbf-08b0-4790-971a-a11aafdfd1bf"
   }
 }]]></component>
   <component name="MacroExpansionManager">
@@ -69,7 +58,17 @@
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
     "Cargo.Doctest of logging::init (line 16).executor": "Run",
+    "Cargo.Test test::tests::test_add_explorer_to_nonexistent_planet.executor": "Run",
+    "Cargo.Test test::tests::test_add_explorer_to_planet.executor": "Run",
+    "Cargo.Test test::tests::test_add_seven_planets.executor": "Run",
+    "Cargo.Test test::tests::test_asteroid_destroys_planet_without_rocket.executor": "Run",
+    "Cargo.Test test::tests::test_asteroid_hits_planet.executor": "Run",
+    "Cargo.Test test::tests::test_explorer_movement_between_planets.executor": "Run",
     "Cargo.Test test::tests::test_orchestrator_initialization.executor": "Run",
+    "Cargo.Test test::tests::test_orchestrator_run.executor": "Run",
+    "Cargo.Test test::tests::test_planet_destruction_removes_explorers.executor": "Run",
+    "Cargo.Test test::tests::test_planet_destruction_removes_explorers_simple.executor": "Run",
+    "Cargo.Test test::tests::test_send_asteroid_and_sunray.executor": "Run",
     "ModuleVcsDetector.initialDetectionPerformed": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.git.unshallow": "true",
@@ -78,7 +77,7 @@
     "com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1": "true",
     "git-widget-placeholder": "main",
     "junie.onboarding.icon.badge.shown": "true",
-    "last_opened_file_path": "C:/Users/hp/RustProjects/Orchestrator",
+    "last_opened_file_path": "D:/S2k in your area/pelatone/Orchestrator",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -86,6 +85,7 @@
     "nodejs_package_manager_path": "npm",
     "org.rust.cargo.project.model.PROJECT_DISCOVERY": "true",
     "org.rust.cargo.project.model.impl.CargoExternalSystemProjectAware.subscribe.first.balloon": "",
+    "org.rust.disableDetachedFileInspectionD:/S2k in your area/pelatone/Orchestrator/src/orchestrator/examples/bevy_gui.rs": "true",
     "org.rust.disableDetachedFileInspectionD:/S2k in your area/pelatone/Orchestrator/src/orchestrator/explorer_control.rs": "true",
     "org.rust.disableDetachedFileInspectionD:/S2k in your area/pelatone/Orchestrator/src/orchestrator/lib.rs": "true",
     "org.rust.disableDetachedFileInspectionD:/S2k in your area/pelatone/Orchestrator/src/orchestrator/orchestrator.rs": "true",
@@ -103,10 +103,9 @@
       <recent name="D:\S2k in your area\pelatone\Orchestrator\src\orchestrator" />
     </key>
   </component>
-  <component name="RunManager" selected="Cargo.Test test::tests::test_orchestrator_initialization">
-    <configuration name="Doctest of logging::init (line 16)" type="CargoCommandRunConfiguration" factoryName="Cargo Command" temporary="true">
-      <option name="buildProfileId" value="test" />
-      <option name="command" value="test --package Orchestrator --doc &quot;logging::init\ (line\ 16)&quot;" />
+  <component name="RunManager" selected="Cargo.Test test::tests::test_orchestrator_run">
+    <configuration name="Test test::tests::test_asteroid_destroys_planet_without_rocket" type="CargoCommandRunConfiguration" factoryName="Cargo Command" temporary="true">
+      <option name="command" value="test --package Orchestrator --lib test::tests::test_asteroid_destroys_planet_without_rocket -- --exact" />
       <option name="workingDirectory" value="file://$PROJECT_DIR$" />
       <envs />
       <option name="emulateTerminal" value="true" />
@@ -122,8 +121,59 @@
         <option name="CARGO.BUILD_TASK_PROVIDER" enabled="true" />
       </method>
     </configuration>
-    <configuration name="Test test::tests::test_orchestrator_initialization" type="CargoCommandRunConfiguration" factoryName="Cargo Command" temporary="true">
-      <option name="command" value="test --package Orchestrator --lib test::tests::test_orchestrator_initialization -- --exact" />
+    <configuration name="Test test::tests::test_asteroid_hits_planet" type="CargoCommandRunConfiguration" factoryName="Cargo Command" temporary="true">
+      <option name="command" value="test --package Orchestrator --lib test::tests::test_asteroid_hits_planet -- --exact" />
+      <option name="workingDirectory" value="file://$PROJECT_DIR$" />
+      <envs />
+      <option name="emulateTerminal" value="true" />
+      <option name="channel" value="DEFAULT" />
+      <option name="requiredFeatures" value="true" />
+      <option name="allFeatures" value="false" />
+      <option name="withSudo" value="false" />
+      <option name="buildTarget" value="REMOTE" />
+      <option name="backtrace" value="SHORT" />
+      <option name="isRedirectInput" value="false" />
+      <option name="redirectInputPath" value="" />
+      <method v="2">
+        <option name="CARGO.BUILD_TASK_PROVIDER" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="Test test::tests::test_explorer_movement_between_planets" type="CargoCommandRunConfiguration" factoryName="Cargo Command" temporary="true">
+      <option name="command" value="test --package Orchestrator --lib test::tests::test_explorer_movement_between_planets -- --exact" />
+      <option name="workingDirectory" value="file://$PROJECT_DIR$" />
+      <envs />
+      <option name="emulateTerminal" value="true" />
+      <option name="channel" value="DEFAULT" />
+      <option name="requiredFeatures" value="true" />
+      <option name="allFeatures" value="false" />
+      <option name="withSudo" value="false" />
+      <option name="buildTarget" value="REMOTE" />
+      <option name="backtrace" value="SHORT" />
+      <option name="isRedirectInput" value="false" />
+      <option name="redirectInputPath" value="" />
+      <method v="2">
+        <option name="CARGO.BUILD_TASK_PROVIDER" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="Test test::tests::test_orchestrator_run" type="CargoCommandRunConfiguration" factoryName="Cargo Command" temporary="true">
+      <option name="command" value="test --package Orchestrator --lib test::tests::test_orchestrator_run -- --exact" />
+      <option name="workingDirectory" value="file://$PROJECT_DIR$" />
+      <envs />
+      <option name="emulateTerminal" value="true" />
+      <option name="channel" value="DEFAULT" />
+      <option name="requiredFeatures" value="true" />
+      <option name="allFeatures" value="false" />
+      <option name="withSudo" value="false" />
+      <option name="buildTarget" value="REMOTE" />
+      <option name="backtrace" value="SHORT" />
+      <option name="isRedirectInput" value="false" />
+      <option name="redirectInputPath" value="" />
+      <method v="2">
+        <option name="CARGO.BUILD_TASK_PROVIDER" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="Test test::tests::test_planet_destruction_removes_explorers_simple" type="CargoCommandRunConfiguration" factoryName="Cargo Command" temporary="true">
+      <option name="command" value="test --package Orchestrator --lib test::tests::test_planet_destruction_removes_explorers_simple -- --exact" />
       <option name="workingDirectory" value="file://$PROJECT_DIR$" />
       <envs />
       <option name="emulateTerminal" value="true" />
@@ -141,8 +191,11 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Cargo.Test test::tests::test_orchestrator_initialization" />
-        <item itemvalue="Cargo.Doctest of logging::init (line 16)" />
+        <item itemvalue="Cargo.Test test::tests::test_orchestrator_run" />
+        <item itemvalue="Cargo.Test test::tests::test_asteroid_hits_planet" />
+        <item itemvalue="Cargo.Test test::tests::test_planet_destruction_removes_explorers_simple" />
+        <item itemvalue="Cargo.Test test::tests::test_asteroid_destroys_planet_without_rocket" />
+        <item itemvalue="Cargo.Test test::tests::test_explorer_movement_between_planets" />
       </list>
     </recent_temporary>
   </component>
@@ -160,6 +213,7 @@
       <workItem from="1767908853998" duration="1662000" />
       <workItem from="1767910555678" duration="1225000" />
       <workItem from="1767969699736" duration="17871000" />
+      <workItem from="1768052510706" duration="10557000" />
     </task>
     <task id="LOCAL-00001" summary="test">
       <option name="closed" value="true" />
