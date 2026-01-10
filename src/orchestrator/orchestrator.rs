@@ -294,7 +294,8 @@ impl Orchestrator {
     }
 
     fn is_planet_alive(&self, planet_id: ID) -> bool {
-        todo!()
+        //to do!!!!!!!!!!!
+        false
     }
 
     /// Toggle explorer AI on/off
