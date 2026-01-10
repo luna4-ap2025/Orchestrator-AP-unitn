@@ -16,7 +16,7 @@ mod tests {
     };
     use crossbeam_channel::bounded;
     use common_game::components::resource::GenericResource;
-    use common_game::protocols::planet_explorer::{ExplorerToPlanet, PlanetToExplorer};
+    use common_game::protocols::planet_explorer::{ExplorerToPlanet};
 
     /// Test basic orchestrator initialization
     #[test]
