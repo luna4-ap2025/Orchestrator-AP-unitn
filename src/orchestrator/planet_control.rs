@@ -9,7 +9,7 @@
 use common_game::protocols::orchestrator_explorer::OrchestratorToExplorer;
 use common_game::protocols::orchestrator_planet::PlanetToOrchestrator;
 use common_game::utils::ID;
-
+use OrchestratorToExplorer::MoveToPlanet;
 use crate::Orchestrator;
 
 /// Handles incoming messages from a planet.
@@ -166,7 +166,8 @@ fn handle_incoming_explorer_response(
             log::error!("Planet {planet_id} rejected explorer {explorer_id}: {e}");
 
             if let Some(tx) = orchestrator.explorer_senders.get(&explorer_id) {
-                if tx.send(OrchestratorToExplorer::MoveToPlanet {
+                if tx.send(MoveToPlanet {
+                    planet_id,
                     sender_to_new_planet: None,
                 }).is_err() {
                     log::warn!("Failed to notify explorer {explorer_id} about move rejection");

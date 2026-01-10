@@ -11,9 +11,19 @@
     </cargoProject>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="668d04bc-8fc4-424c-8f8d-c6c91eedaeb2" name="Changes" comment="hehe">
+    <list default="true" id="668d04bc-8fc4-424c-8f8d-c6c91eedaeb2" name="Changes" comment="added tests (not well commented) and some stuff is now public in the orchestrator">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Cargo.lock" beforeDir="false" afterPath="$PROJECT_DIR$/Cargo.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Cargo.toml" beforeDir="false" afterPath="$PROJECT_DIR$/Cargo.toml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/orchestrator/explorer_control.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/orchestrator/explorer_control.rs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/orchestrator/orchestrator.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/orchestrator/orchestrator.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/orchestrator/planet_control.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/orchestrator/planet_control.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/orchestrator/routing.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/orchestrator/routing.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/test.rs" afterDir="false" />
+    </list>
+    <list id="c3b1074b-0d0e-4959-a2fd-cc356ffda3f6" name="Changes by hp" comment="">
+      <change beforePath="$PROJECT_DIR$/Cargo.toml" beforeDir="false" afterPath="$PROJECT_DIR$/Cargo.toml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/orchestrator/explorer_control.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/orchestrator/explorer_control.rs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/test.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/test.rs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -44,6 +54,33 @@
     "accountId": "5e223cbf-08b0-4790-971a-a11aafdfd1bf"
   }
 }]]></component>
+  <component name="LineStatusTrackerManager">
+    <file path="$PROJECT_DIR$/Cargo.toml">
+      <ranges>
+        <range start1="7" end1="7" start2="7" end2="10" changelist="c3b1074b-0d0e-4959-a2fd-cc356ffda3f6" />
+        <range start1="8" end1="9" start2="11" end2="12" changelist="668d04bc-8fc4-424c-8f8d-c6c91eedaeb2" />
+        <range start1="18" end1="18" start2="21" end2="28" changelist="c3b1074b-0d0e-4959-a2fd-cc356ffda3f6" />
+        <range start1="26" end1="29" start2="36" end2="36" changelist="668d04bc-8fc4-424c-8f8d-c6c91eedaeb2" />
+      </ranges>
+    </file>
+    <file path="$PROJECT_DIR$/src/test.rs">
+      <ranges>
+        <range start1="18" end1="18" start2="18" end2="19" changelist="668d04bc-8fc4-424c-8f8d-c6c91eedaeb2" />
+        <range start1="218" end1="220" start2="219" end2="222" changelist="668d04bc-8fc4-424c-8f8d-c6c91eedaeb2" />
+        <range start1="221" end1="221" start2="223" end2="224" changelist="668d04bc-8fc4-424c-8f8d-c6c91eedaeb2" />
+        <range start1="222" end1="234" start2="225" end2="226" changelist="668d04bc-8fc4-424c-8f8d-c6c91eedaeb2" />
+        <range start1="237" end1="237" start2="229" end2="240" changelist="c3b1074b-0d0e-4959-a2fd-cc356ffda3f6" />
+        <range start1="288" end1="290" start2="291" end2="291" changelist="c3b1074b-0d0e-4959-a2fd-cc356ffda3f6" />
+        <range start1="291" end1="293" start2="292" end2="292" changelist="668d04bc-8fc4-424c-8f8d-c6c91eedaeb2" />
+      </ranges>
+    </file>
+    <file path="$PROJECT_DIR$/src/orchestrator/explorer_control.rs">
+      <ranges>
+        <range start1="106" end1="107" start2="106" end2="107" changelist="c3b1074b-0d0e-4959-a2fd-cc356ffda3f6" />
+        <range start1="110" end1="111" start2="110" end2="111" changelist="668d04bc-8fc4-424c-8f8d-c6c91eedaeb2" />
+      </ranges>
+    </file>
+  </component>
   <component name="MacroExpansionManager">
     <option name="directoryName" value="qDRWO4rp" />
   </component>
@@ -71,6 +108,7 @@
     "Cargo.Test test::tests::test_send_asteroid_and_sunray.executor": "Run",
     "ModuleVcsDetector.initialDetectionPerformed": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
     "RunOnceActivity.git.unshallow": "true",
     "RunOnceActivity.rust.reset.selective.auto.import": "true",
     "com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultAutoModeForALLUsers.v1": "true",
@@ -103,7 +141,7 @@
       <recent name="D:\S2k in your area\pelatone\Orchestrator\src\orchestrator" />
     </key>
   </component>
-  <component name="RunManager" selected="Cargo.Test test::tests::test_orchestrator_run">
+  <component name="RunManager" selected="Cargo.Test test::tests::test_asteroid_hits_planet">
     <configuration name="Test test::tests::test_asteroid_destroys_planet_without_rocket" type="CargoCommandRunConfiguration" factoryName="Cargo Command" temporary="true">
       <option name="command" value="test --package Orchestrator --lib test::tests::test_asteroid_destroys_planet_without_rocket -- --exact" />
       <option name="workingDirectory" value="file://$PROJECT_DIR$" />
@@ -191,8 +229,8 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Cargo.Test test::tests::test_orchestrator_run" />
         <item itemvalue="Cargo.Test test::tests::test_asteroid_hits_planet" />
+        <item itemvalue="Cargo.Test test::tests::test_orchestrator_run" />
         <item itemvalue="Cargo.Test test::tests::test_planet_destruction_removes_explorers_simple" />
         <item itemvalue="Cargo.Test test::tests::test_asteroid_destroys_planet_without_rocket" />
         <item itemvalue="Cargo.Test test::tests::test_explorer_movement_between_planets" />
@@ -213,7 +251,7 @@
       <workItem from="1767908853998" duration="1662000" />
       <workItem from="1767910555678" duration="1225000" />
       <workItem from="1767969699736" duration="17871000" />
-      <workItem from="1768052510706" duration="10557000" />
+      <workItem from="1768052510706" duration="21395000" />
     </task>
     <task id="LOCAL-00001" summary="test">
       <option name="closed" value="true" />
@@ -231,7 +269,15 @@
       <option name="project" value="LOCAL" />
       <updated>1767911437323</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="added tests (not well commented) and some stuff is now public in the orchestrator">
+      <option name="closed" value="true" />
+      <created>1768070550586</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1768070550586</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -251,7 +297,8 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="test" />
     <MESSAGE value="no errors yei" />
-    <option name="LAST_COMMIT_MESSAGE" value="no errors yei" />
+    <MESSAGE value="added tests (not well commented) and some stuff is now public in the orchestrator" />
+    <option name="LAST_COMMIT_MESSAGE" value="added tests (not well commented) and some stuff is now public in the orchestrator" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

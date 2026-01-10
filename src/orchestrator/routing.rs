@@ -30,6 +30,7 @@ pub fn handle_travel_request(
         if let Some(tx) = orchestrator.explorer_senders.get(&explorer_id) {
             let _ = tx.send(OrchestratorToExplorer::MoveToPlanet {
                 sender_to_new_planet: None,
+                planet_id : from_planet_id,
             });
         }
 
@@ -77,6 +78,7 @@ pub fn handle_travel_request(
     if let Some(tx) = orchestrator.explorer_senders.get(&explorer_id) {
         if tx.send(OrchestratorToExplorer::MoveToPlanet {
             sender_to_new_planet: Some(explorer_to_planet_sender), // CORRECT: Sender<ExplorerToPlanet>
+            planet_id : from_planet_id,
         }).is_err() {
             log::error!("Failed to notify explorer");
 
@@ -120,6 +122,7 @@ fn send_rejection(orchestrator: &Orchestrator, explorer_id: ID, to_planet_id: ID
     if let Some(tx) = orchestrator.explorer_senders.get(&explorer_id) {
         let _ = tx.send(OrchestratorToExplorer::MoveToPlanet {
             sender_to_new_planet: None,
+            planet_id: to_planet_id,
         });
     }
 

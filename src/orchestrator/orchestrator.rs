@@ -116,6 +116,7 @@ impl Orchestrator {
 
         sender.send(OrchestratorToExplorer::MoveToPlanet {
             sender_to_new_planet: None,
+            planet_id : initial_planet,
         })
             .map_err(|e| format!("Failed to send initial location to explorer: {e}"))?;
 
@@ -277,7 +278,7 @@ impl Orchestrator {
     }
 
     /// Toggle planet AI on/off
-    fn toggle_planet_ai(&mut self, planet_id: ID, enabled: bool) {
+    pub(crate) fn toggle_planet_ai(&mut self, planet_id: ID, enabled: bool) {
         if let Some(sender) = self.planet_senders.get(&planet_id) {
             let msg = if enabled {
                 OrchestratorToPlanet::StartPlanetAI
@@ -290,6 +291,10 @@ impl Orchestrator {
                     if enabled { "Started" } else { "Stopped" });
             }
         }
+    }
+
+    fn is_planet_alive(&self, planet_id: ID) -> bool {
+        todo!()
     }
 
     /// Toggle explorer AI on/off

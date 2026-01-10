@@ -108,7 +108,7 @@ pub fn handle_explorer_msg(
         | ExplorerToOrchestrator::KillExplorerResult { explorer_id: msg_explorer_id }
         | ExplorerToOrchestrator::ResetExplorerAIResult { explorer_id: msg_explorer_id }
         | ExplorerToOrchestrator::StopExplorerAIResult { explorer_id: msg_explorer_id }
-        | ExplorerToOrchestrator::MovedToPlanetResult { explorer_id: msg_explorer_id } => {
+        | ExplorerToOrchestrator::MovedToPlanetResult { explorer_id: msg_explorer_id, .. } => {
             debug_assert_eq!(
                 explorer_id, msg_explorer_id,
                 "Explorer ID mismatch: param={explorer_id}, msg={msg_explorer_id}"

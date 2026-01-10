@@ -16,6 +16,7 @@ mod tests {
     };
     use crossbeam_channel::bounded;
     use common_game::components::resource::GenericResource;
+    use common_game::protocols::planet_explorer::{ExplorerToPlanet, PlanetToExplorer};
 
     /// Test basic orchestrator initialization
     #[test]
@@ -216,22 +217,13 @@ mod tests {
         let planet_id = ID::from(1u32);
 
         // Canali finti
-        let (to_planet_tx, _to_planet_rx) = bounded::<OrchestratorToPlanet>(10);
-        let (_from_planet_tx, from_planet_rx) = bounded::<PlanetToOrchestrator>(10);
+        let (to_planet_tx, to_planet_rx) = bounded::<common_game::protocols::orchestrator_planet::OrchestratorToPlanet>(10);
+        let (from_planet_tx, from_planet_rx) = bounded::<PlanetToOrchestrator>(10);
+        let (_to_explorer_tx, to_explorer_rx) = bounded::<ExplorerToPlanet>(10);
 
+        let enterprise = enterprise::create_planet(planet_id, to_planet_rx, from_planet_tx, to_explorer_rx);
         orchestrator.add_planet(planet_id, to_planet_tx, from_planet_rx).unwrap();
-
-        // Pianeta senza razzo
-        let mut stats = orchestrator.state().planet_stats(planet_id).unwrap().clone();
-        stats.has_rocket = false;
-        orchestrator.state.update_planet_stats(planet_id, stats);
-
-        // Simula che il pianeta risponda all'asteroide con None
-        crate::orchestrator::planet_control::handle_planet_msg(
-            &mut orchestrator,
-            planet_id,
-            PlanetToOrchestrator::AsteroidAck { planet_id, rocket: None }
-        );
+        orchestrator.toggle_planet_ai(planet_id, true);
 
         // Pianeta deve essere rimosso
         assert!(!orchestrator.state().has_planet(planet_id));
@@ -286,8 +278,6 @@ mod tests {
         // Aspettiamo che il thread termini
         handle.join().expect("Orchestrator thread should finish");
     }
-
-
 
 
 
