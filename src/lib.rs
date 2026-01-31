@@ -16,7 +16,6 @@
 
 pub mod logging;
 pub mod orchestrator;
-mod test;
 
 /// Re-export commonly used types for convenience
 pub use orchestrator::Orchestrator;
