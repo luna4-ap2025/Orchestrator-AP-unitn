@@ -12,10 +12,15 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="668d04bc-8fc4-424c-8f8d-c6c91eedaeb2" name="Changes" comment="added tests (not well commented) and some stuff is now public in the orchestrator">
+      <change afterPath="$PROJECT_DIR$/Files.zip" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/orchestrator/galaxy.rs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Cargo.lock" beforeDir="false" afterPath="$PROJECT_DIR$/Cargo.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Cargo.toml" beforeDir="false" afterPath="$PROJECT_DIR$/Cargo.toml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/orchestrator/mod.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/orchestrator/mod.rs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/orchestrator/orchestrator.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/orchestrator/orchestrator.rs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/orchestrator/state.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/orchestrator/state.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/orchestrator/tests/orchestrator_tests.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/orchestrator/tests/orchestrator_tests.rs" afterDir="false" />
     </list>
     <list id="c3b1074b-0d0e-4959-a2fd-cc356ffda3f6" name="Changes by hp" comment="" />
     <option name="SHOW_DIALOG" value="false" />
@@ -109,7 +114,24 @@
       <recent name="D:\S2k in your area\pelatone\Orchestrator\src\orchestrator" />
     </key>
   </component>
-  <component name="RunManager" selected="Cargo.Test test::tests::test_asteroid_hits_planet">
+  <component name="RunManager" selected="Cargo.Doctest of logging::init (line 16)">
+    <configuration name="Doctest of logging::init (line 16)" type="CargoCommandRunConfiguration" factoryName="Cargo Command" temporary="true">
+      <option name="command" value="test --package Orchestrator --doc &quot;logging::init\ (line\ 16)&quot;" />
+      <option name="workingDirectory" value="file://$PROJECT_DIR$" />
+      <envs />
+      <option name="emulateTerminal" value="true" />
+      <option name="channel" value="DEFAULT" />
+      <option name="requiredFeatures" value="true" />
+      <option name="allFeatures" value="false" />
+      <option name="withSudo" value="false" />
+      <option name="buildTarget" value="REMOTE" />
+      <option name="backtrace" value="SHORT" />
+      <option name="isRedirectInput" value="false" />
+      <option name="redirectInputPath" value="" />
+      <method v="2">
+        <option name="CARGO.BUILD_TASK_PROVIDER" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="Test test::tests::test_asteroid_destroys_planet_without_rocket" type="CargoCommandRunConfiguration" factoryName="Cargo Command" temporary="true">
       <option name="command" value="test --package Orchestrator --lib test::tests::test_asteroid_destroys_planet_without_rocket -- --exact" />
       <option name="workingDirectory" value="file://$PROJECT_DIR$" />
@@ -129,23 +151,6 @@
     </configuration>
     <configuration name="Test test::tests::test_asteroid_hits_planet" type="CargoCommandRunConfiguration" factoryName="Cargo Command" temporary="true">
       <option name="command" value="test --package Orchestrator --lib test::tests::test_asteroid_hits_planet -- --exact" />
-      <option name="workingDirectory" value="file://$PROJECT_DIR$" />
-      <envs />
-      <option name="emulateTerminal" value="true" />
-      <option name="channel" value="DEFAULT" />
-      <option name="requiredFeatures" value="true" />
-      <option name="allFeatures" value="false" />
-      <option name="withSudo" value="false" />
-      <option name="buildTarget" value="REMOTE" />
-      <option name="backtrace" value="SHORT" />
-      <option name="isRedirectInput" value="false" />
-      <option name="redirectInputPath" value="" />
-      <method v="2">
-        <option name="CARGO.BUILD_TASK_PROVIDER" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="Test test::tests::test_explorer_movement_between_planets" type="CargoCommandRunConfiguration" factoryName="Cargo Command" temporary="true">
-      <option name="command" value="test --package Orchestrator --lib test::tests::test_explorer_movement_between_planets -- --exact" />
       <option name="workingDirectory" value="file://$PROJECT_DIR$" />
       <envs />
       <option name="emulateTerminal" value="true" />
@@ -197,11 +202,11 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Cargo.Doctest of logging::init (line 16)" />
         <item itemvalue="Cargo.Test test::tests::test_asteroid_hits_planet" />
         <item itemvalue="Cargo.Test test::tests::test_orchestrator_run" />
         <item itemvalue="Cargo.Test test::tests::test_planet_destruction_removes_explorers_simple" />
         <item itemvalue="Cargo.Test test::tests::test_asteroid_destroys_planet_without_rocket" />
-        <item itemvalue="Cargo.Test test::tests::test_explorer_movement_between_planets" />
       </list>
     </recent_temporary>
   </component>
@@ -223,7 +228,7 @@
       <workItem from="1769689828828" duration="104000" />
       <workItem from="1769794620676" duration="8109000" />
       <workItem from="1769901491037" duration="3967000" />
-      <workItem from="1769957527188" duration="3047000" />
+      <workItem from="1769957527188" duration="5901000" />
     </task>
     <task id="LOCAL-00001" summary="test">
       <option name="closed" value="true" />
@@ -249,7 +254,15 @@
       <option name="project" value="LOCAL" />
       <updated>1768070550586</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="added tests (not well commented) and some stuff is now public in the orchestrator">
+      <option name="closed" value="true" />
+      <created>1769961214920</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1769961214920</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -271,6 +284,17 @@
     <MESSAGE value="no errors yei" />
     <MESSAGE value="added tests (not well commented) and some stuff is now public in the orchestrator" />
     <option name="LAST_COMMIT_MESSAGE" value="added tests (not well commented) and some stuff is now public in the orchestrator" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
+          <url>file://$PROJECT_DIR$/src/logging.rs</url>
+          <line>21</line>
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

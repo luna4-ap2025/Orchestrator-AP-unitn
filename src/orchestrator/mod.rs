@@ -14,6 +14,8 @@ pub mod gui_interface;
 
 mod orchestrator;
 mod galaxy;
+mod galaxy_ai;
+mod galaxy_topology;
 
 pub use orchestrator::Orchestrator;
 pub use state::SystemState;

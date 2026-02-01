@@ -19,6 +19,8 @@ use common_game::utils::ID;
 
 use crate::orchestrator::state::SystemState;
 use crate::orchestrator::gui_interface::{GuiEvent, GuiState, GuiCommand};
+use crate::orchestrator::galaxy_ai::{GalaxyAI, GalaxyAction};
+use crate::orchestrator::galaxy_topology::GalaxyTopology;
 use crate::orchestrator::{planet_control, explorer_control};
 
 /// Main orchestrator structure that manages the entire simulation.
@@ -45,6 +47,9 @@ pub struct Orchestrator {
     gui_command_sender: Sender<GuiCommand>,
     gui_command_receiver: Receiver<GuiCommand>,
 
+    /// Galaxy AI that makes decisions
+    galaxy_ai: Option<GalaxyAI>,
+
     /// Control flag for graceful shutdown
     pub(crate) should_stop: Arc<AtomicBool>,
 }
@@ -67,6 +72,7 @@ impl Orchestrator {
             gui_event_receiver,
             gui_command_sender,
             gui_command_receiver,
+            galaxy_ai: None,
             should_stop: Arc::new(AtomicBool::new(false)),
         })
     }
@@ -110,6 +116,160 @@ impl Orchestrator {
 
         let _ = self.gui_event_sender.send(GuiEvent::ExplorerAdded(explorer_id, planet_id));
         Ok(())
+    }
+
+    // ==================== Galaxy Setup ====================
+
+    /// Creates a standard 7-planet galaxy with the specified topology.
+    ///
+    /// This automatically:
+    /// - Creates 7 planets
+    /// - Sets up communication channels
+    /// - Connects them according to the topology
+    ///
+    /// # Arguments
+    /// * `topology` - The connection pattern for the planets
+    ///
+    /// # Returns
+    /// A vector of the created planet IDs (0-6)
+    ///
+    /// # Errors
+    ///
+    /// Returns an error if planet creation or topology setup fails
+    pub fn setup_default_galaxy(&mut self, topology: GalaxyTopology) -> Result<Vec<ID>, String> {
+        log::info!("Setting up 7-planet galaxy with {:?} topology", topology);
+
+        let planet_ids: Vec<ID> = (0..7).map(|i| ID::from(i as u32)).collect();
+
+        // Create all 7 planets with their channels
+        for &planet_id in &planet_ids {
+            let (to_planet_tx, _to_planet_rx) = bounded::<OrchestratorToPlanet>(100);
+            let (_from_planet_tx, from_planet_rx) = bounded::<PlanetToOrchestrator>(100);
+
+            // Store the channels
+            self.planet_senders.insert(planet_id, to_planet_tx);
+            self.planet_receivers.insert(planet_id, from_planet_rx);
+            self.state.add_planet(planet_id);
+
+            let _ = self.gui_event_sender.send(GuiEvent::PlanetAdded(planet_id));
+
+            log::debug!("Created planet {}", planet_id);
+        }
+
+        // Create connections based on topology
+        self.create_topology(&planet_ids, topology)?;
+
+        log::info!("Successfully created 7-planet galaxy");
+        Ok(planet_ids)
+    }
+
+    /// Creates the specified topology for the given planets
+    fn create_topology(&mut self, planet_ids: &[ID], topology: GalaxyTopology) -> Result<(), String> {
+        match topology {
+            GalaxyTopology::Ring => self.create_ring_topology(planet_ids),
+            GalaxyTopology::FullyConnected => self.create_fully_connected_topology(planet_ids),
+            GalaxyTopology::Star => self.create_star_topology(planet_ids),
+            GalaxyTopology::Line => self.create_line_topology(planet_ids),
+            GalaxyTopology::Hub => self.create_hub_topology(planet_ids),
+        }
+    }
+
+    /// Creates a ring topology: 0-1-2-3-4-5-6-0 (each planet has 2 neighbors)
+    fn create_ring_topology(&mut self, planet_ids: &[ID]) -> Result<(), String> {
+        for i in 0..planet_ids.len() {
+            let current = planet_ids[i];
+            let next = planet_ids[(i + 1) % planet_ids.len()];
+            self.state.add_adjacency(current, next)?;
+            log::debug!("Connected planet {} to planet {}", current, next);
+        }
+        log::info!("Created ring topology");
+        Ok(())
+    }
+
+    /// Creates a fully connected topology: every planet connected to every other
+    fn create_fully_connected_topology(&mut self, planet_ids: &[ID]) -> Result<(), String> {
+        for i in 0..planet_ids.len() {
+            for j in (i + 1)..planet_ids.len() {
+                self.state.add_adjacency(planet_ids[i], planet_ids[j])?;
+                log::debug!("Connected planet {} to planet {}", planet_ids[i], planet_ids[j]);
+            }
+        }
+        log::info!("Created fully connected topology");
+        Ok(())
+    }
+
+    /// Creates a star topology: planet 0 at center, connected to all others
+    fn create_star_topology(&mut self, planet_ids: &[ID]) -> Result<(), String> {
+        let center = planet_ids[0];
+        for &planet in &planet_ids[1..] {
+            self.state.add_adjacency(center, planet)?;
+            log::debug!("Connected center planet {} to planet {}", center, planet);
+        }
+        log::info!("Created star topology with center planet {}", center);
+        Ok(())
+    }
+
+    /// Creates a line topology: 0-1-2-3-4-5-6 (linear chain)
+    fn create_line_topology(&mut self, planet_ids: &[ID]) -> Result<(), String> {
+        for i in 0..(planet_ids.len() - 1) {
+            self.state.add_adjacency(planet_ids[i], planet_ids[i + 1])?;
+            log::debug!("Connected planet {} to planet {}", planet_ids[i], planet_ids[i + 1]);
+        }
+        log::info!("Created line topology");
+        Ok(())
+    }
+
+    /// Creates a hub topology: 0 and 3 are hubs, others connect to nearest hub
+    fn create_hub_topology(&mut self, planet_ids: &[ID]) -> Result<(), String> {
+        let hub1 = planet_ids[0];
+        let hub2 = planet_ids[3];
+
+        // Hub 1 connections
+        for &planet in &planet_ids[1..3] {
+            self.state.add_adjacency(hub1, planet)?;
+        }
+
+        // Connect the two hubs
+        self.state.add_adjacency(hub1, hub2)?;
+
+        // Hub 2 connections
+        for &planet in &planet_ids[4..] {
+            self.state.add_adjacency(hub2, planet)?;
+        }
+
+        log::info!("Created hub topology with hubs at {} and {}", hub1, hub2);
+        Ok(())
+    }
+
+    // ==================== Galaxy AI Management ====================
+
+    /// Enables the Galaxy AI with the specified strategy
+    pub fn enable_galaxy_ai(&mut self, ai: GalaxyAI) {
+        log::info!("Galaxy AI enabled with strategy: {:?}", ai.strategy());
+        self.galaxy_ai = Some(ai);
+    }
+
+    /// Disables the Galaxy AI
+    pub fn disable_galaxy_ai(&mut self) {
+        self.galaxy_ai = None;
+        log::info!("Galaxy AI disabled");
+    }
+
+    /// Checks if Galaxy AI is enabled
+    #[must_use]
+    pub fn is_galaxy_ai_enabled(&self) -> bool {
+        self.galaxy_ai.is_some()
+    }
+
+    /// Gets a reference to the Galaxy AI (if enabled)
+    #[must_use]
+    pub fn galaxy_ai(&self) -> Option<&GalaxyAI> {
+        self.galaxy_ai.as_ref()
+    }
+
+    /// Gets a mutable reference to the Galaxy AI (if enabled)
+    pub fn galaxy_ai_mut(&mut self) -> Option<&mut GalaxyAI> {
+        self.galaxy_ai.as_mut()
     }
 
     // ==================== Main Loop ====================
@@ -189,6 +349,36 @@ impl Orchestrator {
 
         for planet_id in dead_planets {
             self.destroy_planet(planet_id);
+        }
+
+        // Run Galaxy AI
+        self.run_galaxy_ai();
+    }
+
+    /// Runs the Galaxy AI to make decisions
+    fn run_galaxy_ai(&mut self) {
+        if let Some(galaxy_ai) = &mut self.galaxy_ai {
+            let alive_planets = self.state.alive_planets_sorted();
+
+            if alive_planets.is_empty() {
+                return; // No planets to act on
+            }
+
+            let action = galaxy_ai.update(&alive_planets);
+
+            match action {
+                GalaxyAction::SendAsteroid { target_planet } => {
+                    log::info!("Galaxy AI decided to send asteroid to planet {target_planet}");
+                    let _ = self.send_asteroid_to_planet(target_planet);
+                }
+                GalaxyAction::SendSunray { target_planet } => {
+                    log::info!("Galaxy AI decided to send sunray to planet {target_planet}");
+                    self.send_sunray_to_planet(target_planet);
+                }
+                GalaxyAction::DoNothing => {
+                    // AI chose to do nothing this cycle
+                }
+            }
         }
     }
 

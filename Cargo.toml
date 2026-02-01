@@ -1,8 +1,7 @@
 [package]
 name = "Orchestrator"
 version = "0.1.0"
-edition = "2024"
-description = "Orchestrator for the space simulation game"
+edition = "2021"
 license = "MIT"
 
 [dependencies]
@@ -15,11 +14,7 @@ tokio = { version = "1.0", features = ["full"] }
 serde = { version = "1.0.228", features = ["derive"] }
 lazy_static = "1.4"
 anyhow = "1.0"
+rand = "0.9"  # Changed from 0.8 to 0.9
 
 [dev-dependencies]
-tokio = { version = "1.0", features = ["full", "rt-multi-thread"] }
 bevy = "0.13"
-
-[lib]
-name = "Orchestrator"
-path = "src/lib.rs"
