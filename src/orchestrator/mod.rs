@@ -13,7 +13,7 @@ pub mod gui_interface;
 
 
 mod orchestrator;
-
+mod galaxy;
 
 pub use orchestrator::Orchestrator;
 pub use state::SystemState;

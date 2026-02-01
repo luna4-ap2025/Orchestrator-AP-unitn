@@ -1,14 +1,12 @@
 //! Main orchestrator implementation.
-//!
-//! The `Orchestrator` struct coordinates all communication between planets and
-//! explorers, manages the galaxy state, and provides a GUI-friendly interface.
 
 use std::collections::HashMap;
 use std::sync::atomic::{AtomicBool, Ordering};
 use std::sync::Arc;
 use std::time::{Duration, Instant};
 
-use crossbeam_channel::{Receiver, Sender, bounded, TryRecvError};
+use crossbeam_channel::{Receiver, Sender, TryRecvError, bounded};
+
 use common_game::components::forge::Forge;
 use common_game::components::resource::GenericResource;
 use common_game::protocols::orchestrator_explorer::{
@@ -55,7 +53,6 @@ impl Orchestrator {
     /// Creates a new orchestrator instance.
     pub fn new() -> Result<Self, String> {
         let forge = Forge::new().map_err(|e| format!("Failed to create forge: {e}"))?;
-
         let (gui_event_sender, gui_event_receiver) = bounded(1000);
         let (gui_command_sender, gui_command_receiver) = bounded(100);
 
@@ -74,6 +71,8 @@ impl Orchestrator {
         })
     }
 
+    // ==================== Entity Management ====================
+
     /// Adds a planet to the orchestrator's management.
     pub fn add_planet(
         &mut self,
@@ -90,7 +89,6 @@ impl Orchestrator {
         self.state.add_planet(planet_id);
 
         let _ = self.gui_event_sender.send(GuiEvent::PlanetAdded(planet_id));
-
         Ok(())
     }
 
@@ -98,32 +96,23 @@ impl Orchestrator {
     pub fn add_explorer(
         &mut self,
         explorer_id: ID,
-        sender: Sender<OrchestratorToExplorer>,
-        receiver: Receiver<ExplorerToOrchestrator<GenericResource>>,
-        initial_planet: ID,
+        to_explorer_tx: Sender<OrchestratorToExplorer>,
+        from_explorer_rx: Receiver<ExplorerToOrchestrator<GenericResource>>,
+        planet_id: ID,
     ) -> Result<(), String> {
-        if self.explorer_senders.contains_key(&explorer_id) {
-            return Err(format!("Explorer with ID {explorer_id} already exists"));
+        if !self.state.is_planet_alive(planet_id) {
+            return Err(format!("Planet {planet_id} is dead"));
         }
 
-        if !self.state.has_planet(initial_planet) {
-            return Err(format!("Initial planet {initial_planet} doesn't exist"));
-        }
+        self.explorer_senders.insert(explorer_id, to_explorer_tx);
+        self.explorer_receivers.insert(explorer_id, from_explorer_rx);
+        self.state.add_explorer(explorer_id, planet_id)?;
 
-        self.explorer_senders.insert(explorer_id, sender.clone());
-        self.explorer_receivers.insert(explorer_id, receiver);
-        self.state.add_explorer(explorer_id, initial_planet)?;
-
-        sender.send(OrchestratorToExplorer::MoveToPlanet {
-            sender_to_new_planet: None,
-            planet_id : initial_planet,
-        })
-            .map_err(|e| format!("Failed to send initial location to explorer: {e}"))?;
-
-        let _ = self.gui_event_sender.send(GuiEvent::ExplorerAdded(explorer_id, initial_planet));
-
+        let _ = self.gui_event_sender.send(GuiEvent::ExplorerAdded(explorer_id, planet_id));
         Ok(())
     }
+
+    // ==================== Main Loop ====================
 
     /// Runs the orchestrator main loop.
     pub fn run(&mut self) -> Result<(), String> {
@@ -132,20 +121,26 @@ impl Orchestrator {
         let mut last_gui_update = Instant::now();
         let gui_update_interval = Duration::from_millis(500);
 
-        while !self.should_stop.load(Ordering::Relaxed) {
-            self.poll_all_messages();
+        // Main loop runs until game ends OR stop requested
+        while !self.should_stop.load(Ordering::Relaxed) && self.state.should_continue() {
+            // Only process messages if game is running (not paused)
+            if self.state.is_running() {
+                self.poll_all_messages();
+                self.periodic_tasks();
+            }
 
+            // Always update GUI (even when paused, to show pause state)
             let now = Instant::now();
             if now.duration_since(last_gui_update) >= gui_update_interval {
-                self.periodic_tasks();
                 self.update_gui_state();
                 last_gui_update = now;
             }
 
-            std::thread::sleep(Duration::from_millis(1));
+            // Small sleep to prevent busy-waiting
+            std::thread::sleep(Duration::from_millis(10));
         }
 
-        log::info!("Orchestrator main loop stopped");
+        log::info!("Orchestrator main loop stopped (game_state: {:?})", self.state.game_state());
         Ok(())
     }
 
@@ -158,7 +153,6 @@ impl Orchestrator {
                 planet_msgs.push((planet_id, msg));
             }
         }
-
         for (planet_id, msg) in planet_msgs {
             planet_control::handle_planet_msg(self, planet_id, msg);
         }
@@ -170,7 +164,6 @@ impl Orchestrator {
                 explorer_msgs.push((explorer_id, msg));
             }
         }
-
         for (explorer_id, msg) in explorer_msgs {
             explorer_control::handle_explorer_msg(self, explorer_id, msg);
         }
@@ -179,6 +172,29 @@ impl Orchestrator {
         while let Ok(command) = self.gui_command_receiver.try_recv() {
             self.handle_gui_command(command);
         }
+    }
+
+    /// Periodic maintenance tasks
+    fn periodic_tasks(&mut self) {
+        // Check for disconnected planets
+        let dead_planets: Vec<ID> = self.planet_receivers
+            .iter()
+            .filter_map(|(&id, rx)| {
+                match rx.try_recv() {
+                    Err(TryRecvError::Disconnected) => Some(id),
+                    _ => None,
+                }
+            })
+            .collect();
+
+        for planet_id in dead_planets {
+            self.destroy_planet(planet_id);
+        }
+    }
+
+    /// Update GUI with current state
+    fn update_gui_state(&self) {
+        let _ = self.gui_event_sender.send(GuiEvent::StateUpdate(self.get_gui_state()));
     }
 
     /// Stops the orchestrator gracefully.
@@ -196,6 +212,8 @@ impl Orchestrator {
             log::debug!("Sent KillExplorer to explorer {explorer_id}");
         }
     }
+
+    // ==================== GUI Interface ====================
 
     /// Returns a snapshot of the current GUI state.
     #[must_use]
@@ -215,23 +233,11 @@ impl Orchestrator {
         self.gui_command_sender.clone()
     }
 
-    /// Returns a reference to the forge.
-    #[must_use]
-    pub fn forge(&self) -> &Forge {
-        &self.forge
-    }
-
-    /// Returns a reference to the system state.
-    #[must_use]
-    pub fn state(&self) -> &SystemState {
-        &self.state
-    }
-
     /// Handle GUI commands from user
     fn handle_gui_command(&mut self, command: GuiCommand) {
         match command {
             GuiCommand::SendAsteroid { planet_id } => {
-                self.send_asteroid_to_planet(planet_id);
+                let _ = self.send_asteroid_to_planet(planet_id);
             }
             GuiCommand::SendSunray { planet_id } => {
                 self.send_sunray_to_planet(planet_id);
@@ -243,25 +249,36 @@ impl Orchestrator {
                 self.toggle_explorer_ai(explorer_id, enabled);
             }
             GuiCommand::PauseSimulation => {
-                log::info!("Simulation pause requested");
+                self.state.pause();
+                log::info!("Simulation paused");
             }
             GuiCommand::ResumeSimulation => {
-                log::info!("Simulation resume requested");
+                self.state.resume();
+                log::info!("Simulation resumed");
             }
         }
     }
 
-    /// Send an asteroid to a planet
-    pub(crate) fn send_asteroid_to_planet(&mut self, planet_id: ID) {
-        if let Some(sender) = self.planet_senders.get(&planet_id) {
-            let asteroid = self.forge.generate_asteroid();
-            if sender.send(OrchestratorToPlanet::Asteroid(asteroid)).is_ok() {
-                log::info!("Sent asteroid to planet {planet_id}");
-                self.state.increment_asteroids_sent();
+    // ==================== Game Actions ====================
 
-                let _ = self.gui_event_sender.send(GuiEvent::AsteroidSent(planet_id));
-            }
+    /// Send an asteroid to a planet
+    pub fn send_asteroid_to_planet(&mut self, planet_id: ID) -> Result<(), String> {
+        if !self.state.is_planet_alive(planet_id) {
+            return Err("Planet is dead".into());
         }
+
+        let tx = self.planet_senders
+            .get(&planet_id)
+            .ok_or("Planet sender missing")?;
+
+        let asteroid = self.forge.generate_asteroid();
+        tx.send(OrchestratorToPlanet::Asteroid(asteroid))
+            .map_err(|_| "Send failed")?;
+
+        self.state.increment_asteroids_sent();
+        let _ = self.gui_event_sender.send(GuiEvent::AsteroidSent(planet_id));
+
+        Ok(())
     }
 
     /// Send a sunray to a planet
@@ -271,7 +288,6 @@ impl Orchestrator {
             if sender.send(OrchestratorToPlanet::Sunray(sunray)).is_ok() {
                 log::info!("Sent sunray to planet {planet_id}");
                 self.state.increment_sunrays_sent();
-
                 let _ = self.gui_event_sender.send(GuiEvent::SunraySent(planet_id));
             }
         }
@@ -293,11 +309,6 @@ impl Orchestrator {
         }
     }
 
-    fn is_planet_alive(&self, _planet_id: ID) -> bool {
-        //to do!!!!!!!!!!!
-        false
-    }
-
     /// Toggle explorer AI on/off
     fn toggle_explorer_ai(&mut self, explorer_id: ID, enabled: bool) {
         if let Some(sender) = self.explorer_senders.get(&explorer_id) {
@@ -314,50 +325,74 @@ impl Orchestrator {
         }
     }
 
-    /// Periodic maintenance tasks
+    // ==================== Planet/Explorer Lifecycle ====================
 
-    fn periodic_tasks(&mut self) {
-        let dead_planets: Vec<ID> = self.planet_receivers
-            .iter()
-            .filter_map(|(&id, rx)| {
-                match rx.try_recv() {
-                    Err(TryRecvError::Disconnected) => Some(id),
-                    _ => None,
-                }
-            })
-            .collect();
+    /// Destroys a planet and all explorers on it.
+    /// This is the PUBLIC method that planet_controls.rs should call.
+    pub(crate) fn destroy_planet(&mut self, planet_id: ID) {
+        log::warn!("Destroying planet {planet_id}");
 
-        for planet_id in dead_planets {
-            self.handle_planet_death(planet_id);
-        }
-    }
+        // Get all explorers on the dying planet
+        let explorers_on_planet: Vec<ID> = self.state.get_explorers_on_planet(planet_id);
 
-
-    /// Update GUI with current state
-    fn update_gui_state(&self) {
-        let _ = self.gui_event_sender.send(GuiEvent::StateUpdate(self.get_gui_state()));
-    }
-
-    /// Handle planet death (disconnection)
-    pub(crate) fn handle_planet_death(&mut self, planet_id: ID) {
-        log::warn!("Planet {planet_id} appears to be dead, cleaning up");
-
-        let explorers_on_planet: Vec<ID> = self.state
-            .get_explorers_on_planet(planet_id);
-
+        // Kill all explorers on the planet
         for explorer_id in explorers_on_planet {
-            if let Some(sender) = self.explorer_senders.get(&explorer_id) {
-                let _ = sender.send(OrchestratorToExplorer::KillExplorer);
-            }
-            self.state.remove_explorer(explorer_id);
-
-            let _ = self.gui_event_sender.send(GuiEvent::ExplorerRemoved(explorer_id));
+            self.kill_explorer(explorer_id);
         }
 
+        // Send kill command to planet (if still connected)
+        if let Some(sender) = self.planet_senders.get(&planet_id) {
+            let _ = sender.send(OrchestratorToPlanet::KillPlanet);
+        }
+
+        // Clean up planet from orchestrator
         self.planet_senders.remove(&planet_id);
         self.planet_receivers.remove(&planet_id);
+
+        // Remove from state (this also updates game stats)
         self.state.remove_planet(planet_id);
 
+        // Notify GUI
         let _ = self.gui_event_sender.send(GuiEvent::PlanetRemoved(planet_id));
+    }
+
+    /// Kills an explorer
+    pub(crate) fn kill_explorer(&mut self, explorer_id: ID) {
+        log::info!("Killing explorer {explorer_id}");
+
+        // Send kill command to explorer (if still connected)
+        if let Some(sender) = self.explorer_senders.get(&explorer_id) {
+            let _ = sender.send(OrchestratorToExplorer::KillExplorer);
+        }
+
+        // Clean up from orchestrator
+        self.explorer_senders.remove(&explorer_id);
+        self.explorer_receivers.remove(&explorer_id);
+
+        // Remove from state (this also updates game stats)
+        self.state.remove_explorer(explorer_id);
+
+        // Notify GUI
+        let _ = self.gui_event_sender.send(GuiEvent::ExplorerRemoved(explorer_id));
+    }
+
+    // ==================== Accessors ====================
+
+    /// Returns a reference to the forge.
+    #[must_use]
+    pub fn forge(&self) -> &Forge {
+        &self.forge
+    }
+
+    /// Returns a reference to the system state.
+    #[must_use]
+    pub fn state(&self) -> &SystemState {
+        &self.state
+    }
+}
+
+impl Default for Orchestrator {
+    fn default() -> Self {
+        Self::new().expect("Failed to create default Orchestrator")
     }
 }
