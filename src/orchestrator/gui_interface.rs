@@ -182,7 +182,7 @@ impl GuiState {
     #[must_use]
     pub fn from_system_state(system_state: &SystemState) -> Self {
         let planets: Vec<GuiPlanet> = system_state
-            .alive_planets_sorted()
+            .get_alive_planets_sorted()
             .into_iter()
             .enumerate()
             .map(|(i, planet_id)| {

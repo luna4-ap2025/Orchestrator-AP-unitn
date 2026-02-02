@@ -314,7 +314,7 @@ impl SystemState {
 
     /// Gets all alive planet IDs in sorted order for deterministic GUI.
     #[must_use]
-    pub fn alive_planets_sorted(&self) -> Vec<ID> {
+    pub fn get_alive_planets_sorted(&self) -> Vec<ID> {
         let mut planets: Vec<ID> = self.galaxy_structure.get_alive_planets().iter().copied().collect();
         planets.sort_unstable();
         planets
@@ -324,6 +324,18 @@ impl SystemState {
     #[must_use]
     pub fn get_alive_planets(&self) -> &std::collections::HashSet<ID> {
         self.galaxy_structure.get_alive_planets()
+    }
+
+    /// Returns a reference to the adjacency map
+    #[must_use]
+    pub fn get_adjacency(&self) -> &HashMap<ID, HashSet<ID>> {
+        &self.galaxy_structure.get_adjacency()
+    }
+
+    /// Returns the adjacents to a specific planet
+    #[must_use]
+    pub fn get_adjacents(&self, select: ID) -> &HashSet<ID> {
+        self.galaxy_structure.get_adjacents(select)
     }
 
     /// Updates planet statistics.

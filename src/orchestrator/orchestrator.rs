@@ -22,7 +22,7 @@ use crate::orchestrator::gui_interface::{GuiEvent, GuiState, GuiCommand};
 use crate::orchestrator::galaxy_ai::*;
 use crate::orchestrator::{planet_control, explorer_control};
 use crate::orchestrator::galaxy_ai::AIPhase::Dormant;
-use crate::orchestrator::galaxy_structure::Galaxy_Structure;
+use crate::orchestrator::galaxy_structure::GalaxyStructure;
 
 
 
@@ -259,7 +259,7 @@ impl Orchestrator {
 
     /// Runs the Galaxy AI to make decisions
     fn run_galaxy_ai(&mut self) {
-        let alive_planets = self.state.alive_planets_sorted();
+        let alive_planets = self.state.get_alive_planets_sorted();
 
         self.galaxy_ai.update(&alive_planets);
 
@@ -275,7 +275,7 @@ impl Orchestrator {
                 self.send_sunray_to_planet(*target_planet);
             }
             GalaxyAction::DoNothing => {
-                // AI chose to do nothing this cycle
+                log::info!("Galaxy AI chose to do nothing this cycle");
             }
         }
     }
