@@ -53,6 +53,9 @@ pub struct Orchestrator {
 
     /// Control flag for graceful shutdown
     pub(crate) should_stop: Arc<AtomicBool>,
+
+    ///Partial simulation speed control
+    pub(crate) cycle_duration_in_millis: u64,
 }
 
 impl Orchestrator {
@@ -75,6 +78,7 @@ impl Orchestrator {
             gui_command_receiver,
             galaxy_ai: GalaxyAI::new(),
             should_stop: Arc::new(AtomicBool::new(false)),
+            cycle_duration_in_millis: 500,
         })
     }
 
@@ -304,7 +308,7 @@ impl Orchestrator {
             }
 
             // Small sleep to prevent busy-waiting
-            std::thread::sleep(Duration::from_millis(500));
+            std::thread::sleep(Duration::from_millis(self.cycle_duration_in_millis));
         }
 
         log::info!("Orchestrator main loop stopped (game_state: {:?})", self.state.game_state());
@@ -446,6 +450,9 @@ impl Orchestrator {
             GuiCommand::ResumeSimulation => {
                 self.state.resume();
                 log::info!("Simulation resumed");
+            }
+            GuiCommand::SetSimulationCycleLengthInMillis { millis } => {
+                self.cycle_duration_in_millis = millis;
             }
         }
     }

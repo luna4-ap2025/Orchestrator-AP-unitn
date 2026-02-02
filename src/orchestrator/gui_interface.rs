@@ -84,6 +84,10 @@ pub enum GuiCommand {
     PauseSimulation,
     /// Resume the simulation from paused state
     ResumeSimulation,
+    ///Change simulation cycle length
+    SetSimulationCycleLengthInMillis {
+        millis: u64
+    },
 }
 
 /// GUI representation of the complete system state.
