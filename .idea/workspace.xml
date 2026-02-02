@@ -11,8 +11,8 @@
     </cargoProject>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="668d04bc-8fc4-424c-8f8d-c6c91eedaeb2" name="Changes" comment="fixed minor naming issues and added more logging, no obvious errors remain">
-      <change beforePath="$PROJECT_DIR$/src/orchestrator/galaxy_ai.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/orchestrator/galaxy_ai.rs" afterDir="false" />
+    <list default="true" id="668d04bc-8fc4-424c-8f8d-c6c91eedaeb2" name="Changes" comment="Orchestrator can now be generated with given message channels and galaxy initialization file; galaxy AI can now be initialized as active or inactive">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/orchestrator/orchestrator.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/orchestrator/orchestrator.rs" afterDir="false" />
     </list>
     <list id="c3b1074b-0d0e-4959-a2fd-cc356ffda3f6" name="Changes by hp" comment="" />
@@ -334,7 +334,15 @@
       <option name="project" value="LOCAL" />
       <updated>1770069486534</updated>
     </task>
-    <option name="localTasksCounter" value="14" />
+    <task id="LOCAL-00014" summary="Orchestrator can now be generated with given message channels and galaxy initialization file; galaxy AI can now be initialized as active or inactive">
+      <option name="closed" value="true" />
+      <created>1770070186269</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1770070186269</updated>
+    </task>
+    <option name="localTasksCounter" value="15" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -364,7 +372,8 @@
     <MESSAGE value="added some missing logging and comments; game_state can now be created with galaxy_structure initialized from a file" />
     <MESSAGE value="added some missing logging and comments; game_state can now be created with galaxy_structure initialized from a file; fixed a naming issue" />
     <MESSAGE value="fixed minor naming issues and added more logging, no obvious errors remain" />
-    <option name="LAST_COMMIT_MESSAGE" value="fixed minor naming issues and added more logging, no obvious errors remain" />
+    <MESSAGE value="Orchestrator can now be generated with given message channels and galaxy initialization file; galaxy AI can now be initialized as active or inactive" />
+    <option name="LAST_COMMIT_MESSAGE" value="Orchestrator can now be generated with given message channels and galaxy initialization file; galaxy AI can now be initialized as active or inactive" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

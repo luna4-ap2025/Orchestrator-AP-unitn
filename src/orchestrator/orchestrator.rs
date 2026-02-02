@@ -376,15 +376,19 @@ impl Orchestrator {
             }
             GuiCommand::SetSimulationCycleLengthInMillis { millis } => {
                 self.cycle_duration_in_millis = millis;
+                log::info!("Simulation cycle length in millis set to {millis}");
             }
             GuiCommand::SetGalaxyAIParameters {phase,phase_length,phase_change} => {
                 self.set_galaxy_ai_parameters(phase, phase_length, phase_change);
+                log::info!("AI parameters set tp: Phase: {phase:?}, Phase Length: {phase_length}, Phase Change: {phase_change:?}");
             }
             GuiCommand::EnableGalaxyAI => {
                 self.enable_galaxy_ai();
+                log::info!("Galaxy AI enabled");
             }
             GuiCommand::DisableGalaxyAI => {
                 self.disable_galaxy_ai();
+                log::info!("Galaxy AI disabled");
             }
         }
     }
