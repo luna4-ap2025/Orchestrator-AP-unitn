@@ -7,7 +7,7 @@ use std::path::Path;
 //use bevy::utils::HashSet; huh??
 use common_game::utils::ID;
 
-use super::galaxy_structure::Galaxy_Structure;
+use super::galaxy_structure::GalaxyStructure;
 
 /// File reading libraries
 
@@ -146,7 +146,7 @@ pub struct GameStats {
 #[derive(Debug, Clone)]
 pub struct SystemState {
     /// Galaxy topology (planets and adjacency)
-    galaxy_structure: Galaxy_Structure,
+    galaxy_structure: GalaxyStructure,
     /// Current game state (running/paused/ended)
     game_state: GameState,
     /// Mapping of explorer IDs to their current planet IDs
@@ -164,7 +164,7 @@ impl SystemState {
     #[must_use]
     pub fn new() -> Self {
         Self {
-            galaxy_structure: Galaxy_Structure::new(),
+            galaxy_structure: GalaxyStructure::new(),
             game_state: GameState::Running,
             explorer_locations: HashMap::new(),
             planet_stats: HashMap::new(),
@@ -172,7 +172,7 @@ impl SystemState {
             game_stats: GameStats::default(),
         }
     }
-    
+
     /// Create a new system state with galaxy structure based on the initialization file
     #[must_use]
     pub fn new_from_file(structure_file_path: String) -> Self {
@@ -188,16 +188,16 @@ impl SystemState {
 
     /// Generate a galaxy structure from the initialization file
     #[must_use]
-    pub fn new_galaxy_from_file(structure_file: String) -> Galaxy_Structure {
+    pub fn new_galaxy_from_file(structure_file: String) -> GalaxyStructure {
         let file_lines = Self::read_lines_to_vec(structure_file);
         if file_lines.is_ok() {
-            let res = Galaxy_Structure::new_from_file(file_lines.unwrap().as_slice());
+            let res = GalaxyStructure::new_from_file(file_lines.unwrap().as_slice());
             res
-        }else { 
-            Galaxy_Structure::new()
+        }else {
+            GalaxyStructure::new()
         }
     }
-    
+
     /// Parse a file into a vector of strings
     #[must_use]
     fn read_lines_to_vec<P>(filename: P) -> io::Result<Vec<String>>

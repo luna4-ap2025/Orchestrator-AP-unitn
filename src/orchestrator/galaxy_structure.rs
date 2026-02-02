@@ -5,12 +5,12 @@ use common_game::utils::ID;
 
 /// Represents the galaxy topology (planets and their connections)
 #[derive(Debug, Clone)]
-pub struct Galaxy_Structure {
+pub struct GalaxyStructure {
     adjacency: HashMap<ID,HashSet<ID>>, //uses tuples of IDs to indicate a 2-way connection between planets
     alive_planets: HashSet<ID>,
 }
 
-impl Galaxy_Structure {
+impl GalaxyStructure {
     /// Creates a new empty galaxy
     #[must_use]
     pub fn new() -> Self {
@@ -143,7 +143,7 @@ impl Galaxy_Structure {
     }
 }
 
-impl Default for Galaxy_Structure {
+impl Default for GalaxyStructure {
     fn default() -> Self {
         Self::new()
     }
