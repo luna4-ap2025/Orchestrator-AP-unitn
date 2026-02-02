@@ -14,9 +14,9 @@ use log::LevelFilter;
 /// # Examples
 ///
 /// ```no_run
-/// use Orchestrator::logging;
-///
-/// logging::init(LevelFilter::Info);
+///use Orchestrator::logging;
+///use log::LevelFilter;
+///logging::init(LevelFilter::Info);
 /// ```
 ///
 /// # Panics
