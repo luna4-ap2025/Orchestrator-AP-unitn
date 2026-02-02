@@ -11,11 +11,9 @@
     </cargoProject>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="668d04bc-8fc4-424c-8f8d-c6c91eedaeb2" name="Changes" comment="fixed a bug where the ai could change to the dormant phase">
+    <list default="true" id="668d04bc-8fc4-424c-8f8d-c6c91eedaeb2" name="Changes" comment="Removed galaxy topology file as it was not compliant with the documentation and remade the galaxy structure management">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/orchestrator/galaxy.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/orchestrator/galaxy_structure.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/orchestrator/galaxy_topology.rs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/orchestrator/mod.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/orchestrator/mod.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/orchestrator/gui_interface.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/orchestrator/gui_interface.rs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/orchestrator/orchestrator.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/orchestrator/orchestrator.rs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/orchestrator/state.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/orchestrator/state.rs" afterDir="false" />
     </list>
@@ -298,7 +296,15 @@
       <option name="project" value="LOCAL" />
       <updated>1770055740644</updated>
     </task>
-    <option name="localTasksCounter" value="9" />
+    <task id="LOCAL-00009" summary="Removed galaxy topology file as it was not compliant with the documentation and remade the galaxy structure management">
+      <option name="closed" value="true" />
+      <created>1770063115692</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1770063115692</updated>
+    </task>
+    <option name="localTasksCounter" value="10" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -323,7 +329,8 @@
     <MESSAGE value="Added a gui command to partially change the simulation speed" />
     <MESSAGE value="Added logging for new gui commands, updated ai description and fixed a bug where the new phase could be the same as the old one" />
     <MESSAGE value="fixed a bug where the ai could change to the dormant phase" />
-    <option name="LAST_COMMIT_MESSAGE" value="fixed a bug where the ai could change to the dormant phase" />
+    <MESSAGE value="Removed galaxy topology file as it was not compliant with the documentation and remade the galaxy structure management" />
+    <option name="LAST_COMMIT_MESSAGE" value="Removed galaxy topology file as it was not compliant with the documentation and remade the galaxy structure management" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

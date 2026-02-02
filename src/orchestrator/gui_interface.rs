@@ -186,11 +186,11 @@ impl GuiState {
             .into_iter()
             .enumerate()
             .map(|(i, planet_id)| {
-                let stats = system_state.planet_stats(planet_id)
+                let stats = system_state.get_planet_stats(planet_id)
                     .cloned()
                     .unwrap_or_default();
 
-                let planet_count = system_state.alive_planets().len();
+                let planet_count = system_state.get_alive_planets().len();
                 let radius = 300.0;
                 let angle = (i as f32) * 2.0 * std::f32::consts::PI / (planet_count as f32).max(1.0);
 

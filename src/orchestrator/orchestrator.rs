@@ -22,6 +22,9 @@ use crate::orchestrator::gui_interface::{GuiEvent, GuiState, GuiCommand};
 use crate::orchestrator::galaxy_ai::*;
 use crate::orchestrator::{planet_control, explorer_control};
 use crate::orchestrator::galaxy_ai::AIPhase::Dormant;
+use crate::orchestrator::galaxy_structure::Galaxy_Structure;
+
+
 
 /// Main orchestrator structure that manages the entire simulation.
 pub struct Orchestrator {
@@ -127,9 +130,9 @@ impl Orchestrator {
     /// Creates a standard 7-planet galaxy with the specified topology.
     ///
     
-    pub fn setup_default_galaxy() -> Result<Vec<(ID,ID)> {
-        todo!();
-    }
+    
+
+   
     
 
     // ==================== Galaxy AI Management ====================

@@ -1,9 +1,18 @@
 //! System state management for the orchestrator.
 
-use std::collections::HashMap;
+use std::collections::{HashMap, HashSet};
+use std::fs;
+use std::io::{self, BufRead};
+use std::path::Path;
+//use bevy::utils::HashSet; huh??
 use common_game::utils::ID;
 
-use super::galaxy_structure::Galaxy;
+use super::galaxy_structure::Galaxy_Structure;
+
+/// File reading libraries
+
+
+
 
 /// Overall game state
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
@@ -137,7 +146,7 @@ pub struct GameStats {
 #[derive(Debug, Clone)]
 pub struct SystemState {
     /// Galaxy topology (planets and adjacency)
-    galaxy: Galaxy,
+    galaxy_structure: Galaxy_Structure,
     /// Current game state (running/paused/ended)
     game_state: GameState,
     /// Mapping of explorer IDs to their current planet IDs
@@ -155,13 +164,30 @@ impl SystemState {
     #[must_use]
     pub fn new() -> Self {
         Self {
-            galaxy: Galaxy::new(),
+            galaxy_structure: Galaxy_Structure::new(),
             game_state: GameState::Running,
             explorer_locations: HashMap::new(),
             planet_stats: HashMap::new(),
             explorer_stats: HashMap::new(),
             game_stats: GameStats::default(),
         }
+    }
+
+    pub fn setup_galaxy_from_file<P>(structure_file: P) -> Galaxy_Structure {
+        let file_lines = Self::read_lines_to_vec(structure_file);
+        if file_lines.is_ok() {
+            let res = Galaxy_Structure::new_from_file(file_lines);
+        }
+    }
+
+    fn read_lines_to_vec<P>(filename: P) -> io::Result<Vec<String>>
+    where
+        P: AsRef<Path>,
+    {
+        let file = fs::File::open(filename)?;
+        let reader = io::BufReader::new(file);
+
+        reader.lines().collect()
     }
 
     // ==================== Game State Management ====================
@@ -222,7 +248,7 @@ impl SystemState {
 
     /// Adds a planet to the galaxy.
     pub fn add_planet(&mut self, planet_id: ID) {
-        self.galaxy.add_planet(planet_id);
+        self.galaxy_structure.add_planet(planet_id, &[]);
         self.planet_stats.insert(planet_id, PlanetStats::default());
     }
 
@@ -245,7 +271,7 @@ impl SystemState {
         }
 
         // Remove from galaxy
-        self.galaxy.remove_planet(planet_id);
+        self.galaxy_structure.remove_planet(planet_id);
 
         // Remove planet stats
         self.planet_stats.remove(&planet_id);
@@ -254,7 +280,7 @@ impl SystemState {
         self.game_stats.planets_destroyed += 1;
 
         // Check if game should end (no planets left)
-        if self.galaxy.alive_planets().is_empty() {
+        if self.galaxy_structure.get_alive_planets().is_empty() {
             log::warn!("All planets destroyed - ending game");
             self.end_game();
         }
@@ -263,21 +289,21 @@ impl SystemState {
     /// Checks if a planet exists and is alive.
     #[must_use]
     pub fn is_planet_alive(&self, planet_id: ID) -> bool {
-        self.galaxy.is_alive(planet_id)
+        self.galaxy_structure.is_alive(planet_id)
     }
 
     /// Gets all alive planet IDs in sorted order for deterministic GUI.
     #[must_use]
     pub fn alive_planets_sorted(&self) -> Vec<ID> {
-        let mut planets: Vec<ID> = self.galaxy.alive_planets().iter().copied().collect();
+        let mut planets: Vec<ID> = self.galaxy_structure.get_alive_planets().iter().copied().collect();
         planets.sort_unstable();
         planets
     }
 
     /// Gets all alive planet IDs.
     #[must_use]
-    pub fn alive_planets(&self) -> &std::collections::HashSet<ID> {
-        self.galaxy.alive_planets()
+    pub fn get_alive_planets(&self) -> &std::collections::HashSet<ID> {
+        self.galaxy_structure.get_alive_planets()
     }
 
     /// Updates planet statistics.
@@ -287,7 +313,7 @@ impl SystemState {
 
     /// Returns a reference to planet statistics.
     #[must_use]
-    pub fn planet_stats(&self, planet_id: ID) -> Option<&PlanetStats> {
+    pub fn get_planet_stats(&self, planet_id: ID) -> Option<&PlanetStats> {
         self.planet_stats.get(&planet_id)
     }
 
@@ -299,7 +325,7 @@ impl SystemState {
     ///
     /// Returns an error if the initial planet doesn't exist
     pub fn add_explorer(&mut self, explorer_id: ID, planet_id: ID) -> Result<(), String> {
-        if !self.galaxy.is_alive(planet_id) {
+        if !self.galaxy_structure.is_alive(planet_id) {
             return Err(format!("Planet {planet_id} doesn't exist"));
         }
         self.explorer_locations.insert(explorer_id, planet_id);
@@ -368,7 +394,7 @@ impl SystemState {
             ));
         }
 
-        if !self.galaxy.can_travel(from_planet, to_planet) {
+        if !self.galaxy_structure.can_travel(from_planet, to_planet) {
             return Err(format!(
                 "Cannot travel from {from_planet} to {to_planet}"
             ));
@@ -396,20 +422,20 @@ impl SystemState {
     /// # Errors
     ///
     /// Returns an error if either planet is dead
-    pub fn add_adjacency(&mut self, planet_a: ID, planet_b: ID) -> Result<(), String> {
-        self.galaxy.add_connection(planet_a, planet_b)
+    pub fn add_adjacency(&mut self, planet_a: ID, planet_b: ID) {
+        self.galaxy_structure.add_connection(planet_a, planet_b);
     }
 
     /// Checks if two planets are adjacent.
     #[must_use]
     pub fn is_adjacent(&self, planet_a: ID, planet_b: ID) -> bool {
-        self.galaxy.can_travel(planet_a, planet_b)
+        self.galaxy_structure.can_travel(planet_a, planet_b)
     }
 
     /// Gets the neighbors of a planet.
     #[must_use]
     pub fn get_neighbors(&self, planet_id: ID) -> Vec<ID> {
-        self.galaxy.adjacency()
+        self.galaxy_structure.get_adjacency()
             .get(&planet_id)
             .map(|neighbors| {
                 let mut sorted: Vec<ID> = neighbors.iter().copied().collect();
