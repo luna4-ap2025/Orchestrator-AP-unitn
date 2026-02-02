@@ -6,7 +6,7 @@
 
 use serde::{Deserialize, Serialize};
 use common_game::utils::ID;
-
+use crate::orchestrator::galaxy_ai::AIPhase;
 use crate::orchestrator::state::SystemState;
 
 /// Events that flow FROM the orchestrator TO the GUI.
@@ -84,6 +84,20 @@ pub enum GuiCommand {
     PauseSimulation,
     /// Resume the simulation from paused state
     ResumeSimulation,
+    /// Change simulation cycle length
+    SetSimulationCycleLengthInMillis {
+        millis: u64
+    },
+    /// Set galaxy ai parameters
+    SetGalaxyAIParameters {
+        phase: AIPhase,
+        phase_length: u32,
+        phase_change: bool
+    },
+    /// Enable galaxy ai
+    EnableGalaxyAI,
+    /// Disable galaxy ai
+    DisableGalaxyAI
 }
 
 /// GUI representation of the complete system state.
