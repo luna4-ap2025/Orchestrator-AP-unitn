@@ -78,7 +78,36 @@ impl Orchestrator {
             gui_event_receiver,
             gui_command_sender,
             gui_command_receiver,
-            galaxy_ai: GalaxyAI::new(),
+            galaxy_ai: GalaxyAI::new_inactive(),
+            should_stop: Arc::new(AtomicBool::new(false)),
+            cycle_duration_in_millis: 500,
+        })
+    }
+
+    /// Creates a new orchestrator instance with data.
+    pub fn new_with_parameters(
+        planet_senders: HashMap<ID, Sender<OrchestratorToPlanet>>,
+        planet_receivers: HashMap<ID, Receiver<PlanetToOrchestrator>>,
+        explorer_senders: HashMap<ID, Sender<OrchestratorToExplorer>>,
+        explorer_receivers: HashMap<ID, Receiver<ExplorerToOrchestrator<GenericResource>>>,
+        galaxy_structure_file: String,
+    ) -> Result<Self, String> {
+        let forge = Forge::new().map_err(|e| format!("Failed to create forge: {e}"))?;
+        let (gui_event_sender, gui_event_receiver) = bounded(1000);
+        let (gui_command_sender, gui_command_receiver) = bounded(100);
+
+        Ok(Self {
+            forge,
+            planet_senders,
+            planet_receivers,
+            explorer_senders,
+            explorer_receivers,
+            state: SystemState::new_from_file(galaxy_structure_file),
+            gui_event_sender,
+            gui_event_receiver,
+            gui_command_sender,
+            gui_command_receiver,
+            galaxy_ai: GalaxyAI::new_active(),
             should_stop: Arc::new(AtomicBool::new(false)),
             cycle_duration_in_millis: 500,
         })
@@ -129,11 +158,11 @@ impl Orchestrator {
 
     /// Creates a standard 7-planet galaxy with the specified topology.
     ///
-    
-    
 
-   
-    
+
+
+
+
 
     // ==================== Galaxy AI Management ====================
 

@@ -75,14 +75,25 @@ pub(crate) struct GalaxyAI {
 }
 
 impl GalaxyAI {
-    /// Creates a new Galaxy AI that is dormant and will wake in the next cycle
+    /// Creates a new Galaxy AI that is dormant and will NOT wake in the next cycle
     #[must_use]
-    pub fn new() -> Self {
+    pub fn new_inactive() -> Self {
         Self {
             current_intention: DoNothing,
             phase: Dormant,
             current_phase_length: 0,
             phase_change: false,
+        }
+    }
+
+    /// Creates a new Galaxy AI that is dormant and will wake in the next cycle
+    #[must_use]
+    pub fn new_active() -> Self {
+        Self {
+            current_intention: DoNothing,
+            phase: Dormant,
+            current_phase_length: 0,
+            phase_change: true,
         }
     }
 
