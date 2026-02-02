@@ -1,7 +1,27 @@
 //! Galaxy AI that makes decisions about sending asteroids and sunrays.
 //!
-//! The Galaxy AI observes the current state of alive planets each cycle
-//! and decides whether to send asteroids or sunrays to specific planets.
+//! The Galaxy AI works with a phase system: each phase lasts for a random amount of cycles
+//! and determines the percent chance that a random planet will receive a sunray, asteroid or nothing,
+//! once the phase has run for the amount of cycles that was previously decided it kis changed to a different random phase
+//!
+//! The phases and percent chances are as follows:
+//!
+//! - Prosperous phase:     the AI will send mostly sunrays and a few asteroids
+//!                         50% chance for a sunray, 10% for an asteroid and 40% for nothing to happen
+//!
+//! - Destructive phase:    the AI will send mostly asteroids and a few sunrays
+//!                         10% chance for a sunray, 50% for an asteroid and 40% for nothing to happen
+//!
+//! - Chaotic phase:        the AI will send mostly asteroids with some sunrays at an increased rate
+//!                         40% chance for a sunray, 60% for an asteroid and 0& for nothing so that every cycle something happens
+//!
+//! - Calm phase:           the AI will send few sunrays and fewer asteroids while doing mostly nothing
+//!                         30% chance for s sunray, 10% for an asteroid and 60% for nothing to happen
+//!
+//! - Dormant phase:        This phase exists mostly as a default state, while in it the AI will do nothing,
+//!                         enabling the AI from rest means setting the phase length to 0 and the phase changed to enabled,
+//!                         that way on the next update the AI will choose a random phase and start working,
+//!                         with the phase change disabled the AI is also disabled. This phase cannot be selected randomly on update
 
 use common_game::utils::ID;
 use rand::Rng;
@@ -68,9 +88,17 @@ impl GalaxyAI {
 
     ///Set the current phase with a random length and active phase change
     fn change_phase_random(&mut self) {
-        self.phase = Self::random_phase();
-        self.current_phase_length = Self::random_phase_length();
-        self.phase_change = true;
+
+        for i in 0..1000  {
+            let new_phase = Self::random_phase();
+            if new_phase != self.phase{     //make sure new phase is not the same as the old
+                self.phase = new_phase;
+                self.current_phase_length = Self::random_phase_length();
+                self.phase_change = true;
+
+                break;
+            }
+        }
     }
 
     ///Set the current phase with a custom phase length and phase change
