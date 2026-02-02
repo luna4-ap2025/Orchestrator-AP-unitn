@@ -25,6 +25,7 @@ The orchestrator is responsible for:
 * Sending global events (asteroids, sunrays)
 * Updating the GUI with the current simulation state
 * Controlling simulation speed, pause, and shutdown
+* Routing the explorers between planets
 
 ---
 
