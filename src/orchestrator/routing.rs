@@ -24,8 +24,8 @@ pub fn handle_travel_request(
     );
 
     // Validate adjacency
-    if !orchestrator.state.is_adjacent(from_planet_id, to_planet_id) {
-        log::warn!("Travel request rejected: planets not adjacent");
+    if !orchestrator.state.can_travel(from_planet_id, to_planet_id) {
+        log::warn!("Travel request rejected: planets not adjacent or some are dead");
 
         if let Some(tx) = orchestrator.explorer_senders.get(&explorer_id) {
             let _ = tx.send(OrchestratorToExplorer::MoveToPlanet {
@@ -37,7 +37,7 @@ pub fn handle_travel_request(
         let _ = orchestrator.gui_event_sender.send(GuiEvent::ExplorerMoveRejected(
             explorer_id,
             to_planet_id,
-            "Planets are not adjacent".to_string(),
+            "Planets are not adjacent or some are dead".to_string(),
         ));
         return;
     }

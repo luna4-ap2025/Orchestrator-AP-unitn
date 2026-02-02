@@ -460,7 +460,7 @@ impl SystemState {
 
     /// Checks if two planets are adjacent.
     #[must_use]
-    pub fn is_adjacent(&self, planet_a: ID, planet_b: ID) -> bool {
+    pub fn can_travel(&self, planet_a: ID, planet_b: ID) -> bool {
         self.galaxy_structure.can_travel(planet_a, planet_b)
     }
 
