@@ -141,6 +141,7 @@ impl GalaxyAI {
     ///Generate a random action with parameters
     fn random_action_integer_percent(send_sunray: u32, send_asteroid: u32, do_nothing: u32, planet_list: &[ID]) -> GalaxyAction {
         if send_sunray + send_asteroid + do_nothing != 100 {
+            log::error!("Total action percentage chance is invalid");
             DoNothing
 
         }else {

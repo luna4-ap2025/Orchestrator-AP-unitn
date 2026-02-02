@@ -21,7 +21,7 @@ impl Galaxy_Structure {
     }
 
     /// Creates a new galaxy from an array of strings
-    pub fn new_from_file(structure_file: &[&str]) -> Self {
+    pub fn new_from_file(structure_file: &[String]) -> Self {
         let mut result = Self::new();
 
         for line in structure_file {

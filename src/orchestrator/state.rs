@@ -172,14 +172,34 @@ impl SystemState {
             game_stats: GameStats::default(),
         }
     }
-
-    pub fn setup_galaxy_from_file<P>(structure_file: P) -> Galaxy_Structure {
-        let file_lines = Self::read_lines_to_vec(structure_file);
-        if file_lines.is_ok() {
-            let res = Galaxy_Structure::new_from_file(file_lines);
+    
+    /// Create a new system state with galaxy structure based on the initialization file
+    #[must_use]
+    pub fn new_from_file(structure_file_path: String) -> Self {
+        Self {
+            galaxy_structure: Self::new_galaxy_from_file(structure_file_path),
+            game_state: GameState::Running,
+            explorer_locations: HashMap::new(),
+            planet_stats: HashMap::new(),
+            explorer_stats: HashMap::new(),
+            game_stats: GameStats::default(),
         }
     }
 
+    /// Generate a galaxy structure from the initialization file
+    #[must_use]
+    pub fn new_galaxy_from_file(structure_file: String) -> Galaxy_Structure {
+        let file_lines = Self::read_lines_to_vec(structure_file);
+        if file_lines.is_ok() {
+            let res = Galaxy_Structure::new_from_file(file_lines.unwrap().as_slice());
+            res
+        }else { 
+            Galaxy_Structure::new()
+        }
+    }
+    
+    /// Parse a file into a vector of strings
+    #[must_use]
     fn read_lines_to_vec<P>(filename: P) -> io::Result<Vec<String>>
     where
         P: AsRef<Path>,
