@@ -86,12 +86,16 @@ pub enum GuiCommand {
     ResumeSimulation,
     /// Change simulation cycle length
     SetSimulationCycleLengthInMillis {
+        /// Milliseconds as a u64
         millis: u64
     },
     /// Set galaxy ai parameters
     SetGalaxyAIParameters {
+        /// AI phase
         phase: AIPhase,
+        /// Phase duration in cycles
         phase_length: u32,
+        /// Can phase change
         phase_change: bool
     },
     /// Enable galaxy ai
