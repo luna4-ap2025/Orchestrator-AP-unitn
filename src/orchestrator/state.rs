@@ -3,7 +3,7 @@
 use std::collections::HashMap;
 use common_game::utils::ID;
 
-use super::galaxy::Galaxy;
+use super::galaxy_structure::Galaxy;
 
 /// Overall game state
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
