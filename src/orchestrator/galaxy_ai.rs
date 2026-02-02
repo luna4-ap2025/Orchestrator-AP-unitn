@@ -7,6 +7,7 @@ use common_game::utils::ID;
 use rand::Rng;
 use crate::orchestrator::galaxy_ai::AIPhase::{Calm, Chaotic, Destructive, Dormant, Prosperous};
 use crate::orchestrator::galaxy_ai::GalaxyAction::{DoNothing, SendAsteroid, SendSunray};
+use serde::{Deserialize, Serialize};
 
 /// Actions that the Galaxy AI can take
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -26,7 +27,7 @@ pub(crate) enum GalaxyAction {
 }
 
 /// Strategy that the Galaxy AI uses to make decisions
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
 pub(crate) enum AIPhase {
     /// 50% sunrays 10% asteroids 40% nothing
     Prosperous,

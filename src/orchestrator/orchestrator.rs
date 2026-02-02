@@ -259,6 +259,11 @@ impl Orchestrator {
         log::info!("Galaxy AI disabled");
         self.galaxy_ai.enable_ai();
     }
+    
+    ///Change Galaxy AI parameters
+    pub fn set_galaxy_ai_parameters(&mut self, phase: AIPhase, phase_length: u32, phase_change: bool) {
+        self.galaxy_ai.set_ai(phase, phase_length, phase_change);
+    }
 
     /// Checks if Galaxy AI is enabled
     #[must_use]
@@ -272,12 +277,12 @@ impl Orchestrator {
 
     /// Gets a reference to the Galaxy AI (if enabled)
     #[must_use]
-    pub fn galaxy_ai(&self) -> &GalaxyAI {
+    pub fn get_galaxy_ai(&self) -> &GalaxyAI {
         &self.galaxy_ai
     }
 
     /// Gets a mutable reference to the Galaxy AI (if enabled)
-    pub fn galaxy_ai_mut(&mut self) -> &mut GalaxyAI {
+    pub fn get_galaxy_ai_mut(&mut self) -> &mut GalaxyAI {
         &mut self.galaxy_ai
     }
 
@@ -453,6 +458,15 @@ impl Orchestrator {
             }
             GuiCommand::SetSimulationCycleLengthInMillis { millis } => {
                 self.cycle_duration_in_millis = millis;
+            }
+            GuiCommand::SetGalaxyAIParameters {phase,phase_length,phase_change} => {
+                self.set_galaxy_ai_parameters(phase, phase_length, phase_change);
+            }
+            GuiCommand::EnableGalaxyAI => {
+                self.enable_galaxy_ai();
+            }
+            GuiCommand::DisableGalaxyAI => {
+                self.disable_galaxy_ai();
             }
         }
     }

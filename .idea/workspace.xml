@@ -11,9 +11,10 @@
     </cargoProject>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="668d04bc-8fc4-424c-8f8d-c6c91eedaeb2" name="Changes" comment="added tests (not well commented) and some stuff is now public in the orchestrator">
+    <list default="true" id="668d04bc-8fc4-424c-8f8d-c6c91eedaeb2" name="Changes" comment="Added a gui command to partially change the simulation speed">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/orchestrator/galaxy_ai.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/orchestrator/galaxy_ai.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/orchestrator/gui_interface.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/orchestrator/gui_interface.rs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/orchestrator/orchestrator.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/orchestrator/orchestrator.rs" afterDir="false" />
     </list>
     <list id="c3b1074b-0d0e-4959-a2fd-cc356ffda3f6" name="Changes by hp" comment="" />
@@ -226,7 +227,7 @@
       <workItem from="1769957527188" duration="5901000" />
       <workItem from="1769984646778" duration="1278000" />
       <workItem from="1770023695957" duration="5000" />
-      <workItem from="1770038733898" duration="8877000" />
+      <workItem from="1770038733898" duration="11280000" />
     </task>
     <task id="LOCAL-00001" summary="test">
       <option name="closed" value="true" />
@@ -260,7 +261,23 @@
       <option name="project" value="LOCAL" />
       <updated>1769961214920</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="Replaced temporary galaxy ai with phase based ai as discussed and fixed ai calls in orchestrator accordingly">
+      <option name="closed" value="true" />
+      <created>1770047828561</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1770047828561</updated>
+    </task>
+    <task id="LOCAL-00006" summary="Added a gui command to partially change the simulation speed">
+      <option name="closed" value="true" />
+      <created>1770048470608</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1770048470608</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -281,7 +298,9 @@
     <MESSAGE value="test" />
     <MESSAGE value="no errors yei" />
     <MESSAGE value="added tests (not well commented) and some stuff is now public in the orchestrator" />
-    <option name="LAST_COMMIT_MESSAGE" value="added tests (not well commented) and some stuff is now public in the orchestrator" />
+    <MESSAGE value="Replaced temporary galaxy ai with phase based ai as discussed and fixed ai calls in orchestrator accordingly" />
+    <MESSAGE value="Added a gui command to partially change the simulation speed" />
+    <option name="LAST_COMMIT_MESSAGE" value="Added a gui command to partially change the simulation speed" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
