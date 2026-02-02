@@ -89,7 +89,7 @@ impl GalaxyAI {
     ///Set the current phase with a random length and active phase change
     fn change_phase_random(&mut self) {
 
-        for i in 0..1000  {
+        for _ in 0..1000  {
             let new_phase = Self::random_phase();
             if new_phase != self.phase{     //make sure new phase is not the same as the old
                 self.phase = new_phase;
@@ -168,12 +168,12 @@ impl GalaxyAI {
 
     ///Generate a random phase, dormant phase is a result only in case of rng error
     fn random_phase() -> AIPhase {
-        let rng = rand::rng().random_range(0..5);
+        let rng = rand::rng().random_range(0..4);
         match rng {
             0 => Prosperous,
             1 => Destructive,
-            3 => Chaotic,
-            4 => Calm,
+            2 => Chaotic,
+            3 => Calm,
             _ => Dormant,
         }
     }

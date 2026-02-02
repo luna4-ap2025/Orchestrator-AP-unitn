@@ -11,7 +11,10 @@
     </cargoProject>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="668d04bc-8fc4-424c-8f8d-c6c91eedaeb2" name="Changes" comment="Added a gui command to partially change the simulation speed" />
+    <list default="true" id="668d04bc-8fc4-424c-8f8d-c6c91eedaeb2" name="Changes" comment="Added logging for new gui commands, updated ai description and fixed a bug where the new phase could be the same as the old one">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/orchestrator/galaxy_ai.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/orchestrator/galaxy_ai.rs" afterDir="false" />
+    </list>
     <list id="c3b1074b-0d0e-4959-a2fd-cc356ffda3f6" name="Changes by hp" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -272,7 +275,15 @@
       <option name="project" value="LOCAL" />
       <updated>1770048470608</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="Added logging for new gui commands, updated ai description and fixed a bug where the new phase could be the same as the old one">
+      <option name="closed" value="true" />
+      <created>1770054478174</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1770054478174</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -295,7 +306,8 @@
     <MESSAGE value="added tests (not well commented) and some stuff is now public in the orchestrator" />
     <MESSAGE value="Replaced temporary galaxy ai with phase based ai as discussed and fixed ai calls in orchestrator accordingly" />
     <MESSAGE value="Added a gui command to partially change the simulation speed" />
-    <option name="LAST_COMMIT_MESSAGE" value="Added a gui command to partially change the simulation speed" />
+    <MESSAGE value="Added logging for new gui commands, updated ai description and fixed a bug where the new phase could be the same as the old one" />
+    <option name="LAST_COMMIT_MESSAGE" value="Added logging for new gui commands, updated ai description and fixed a bug where the new phase could be the same as the old one" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
