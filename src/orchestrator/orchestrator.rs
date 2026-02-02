@@ -19,9 +19,10 @@ use common_game::utils::ID;
 
 use crate::orchestrator::state::SystemState;
 use crate::orchestrator::gui_interface::{GuiEvent, GuiState, GuiCommand};
-use crate::orchestrator::galaxy_ai::{GalaxyAI, GalaxyAction};
+use crate::orchestrator::galaxy_ai::*;
 use crate::orchestrator::galaxy_topology::GalaxyTopology;
 use crate::orchestrator::{planet_control, explorer_control};
+use crate::orchestrator::galaxy_ai::AIPhase::Dormant;
 
 /// Main orchestrator structure that manages the entire simulation.
 pub struct Orchestrator {
@@ -48,7 +49,7 @@ pub struct Orchestrator {
     gui_command_receiver: Receiver<GuiCommand>,
 
     /// Galaxy AI that makes decisions
-    galaxy_ai: Option<GalaxyAI>,
+    galaxy_ai: GalaxyAI,
 
     /// Control flag for graceful shutdown
     pub(crate) should_stop: Arc<AtomicBool>,
@@ -72,7 +73,7 @@ impl Orchestrator {
             gui_event_receiver,
             gui_command_sender,
             gui_command_receiver,
-            galaxy_ai: None,
+            galaxy_ai: GalaxyAI::new(),
             should_stop: Arc::new(AtomicBool::new(false)),
         })
     }
@@ -244,32 +245,36 @@ impl Orchestrator {
     // ==================== Galaxy AI Management ====================
 
     /// Enables the Galaxy AI with the specified strategy
-    pub fn enable_galaxy_ai(&mut self, ai: GalaxyAI) {
-        log::info!("Galaxy AI enabled with strategy: {:?}", ai.strategy());
-        self.galaxy_ai = Some(ai);
+    pub fn enable_galaxy_ai(&mut self) {
+        log::info!("Galaxy AI enabled with phase");
+        self.galaxy_ai.enable_ai();
     }
 
     /// Disables the Galaxy AI
     pub fn disable_galaxy_ai(&mut self) {
-        self.galaxy_ai = None;
         log::info!("Galaxy AI disabled");
+        self.galaxy_ai.enable_ai();
     }
 
     /// Checks if Galaxy AI is enabled
     #[must_use]
     pub fn is_galaxy_ai_enabled(&self) -> bool {
-        self.galaxy_ai.is_some()
+        if self.galaxy_ai.get_phase() == &Dormant && self.galaxy_ai.get_phase_change() == &false {
+            false
+        }else {
+            true
+        }
     }
 
     /// Gets a reference to the Galaxy AI (if enabled)
     #[must_use]
-    pub fn galaxy_ai(&self) -> Option<&GalaxyAI> {
-        self.galaxy_ai.as_ref()
+    pub fn galaxy_ai(&self) -> &GalaxyAI {
+        &self.galaxy_ai
     }
 
     /// Gets a mutable reference to the Galaxy AI (if enabled)
-    pub fn galaxy_ai_mut(&mut self) -> Option<&mut GalaxyAI> {
-        self.galaxy_ai.as_mut()
+    pub fn galaxy_ai_mut(&mut self) -> &mut GalaxyAI {
+        &mut self.galaxy_ai
     }
 
     // ==================== Main Loop ====================
@@ -280,6 +285,7 @@ impl Orchestrator {
 
         let mut last_gui_update = Instant::now();
         let gui_update_interval = Duration::from_millis(500);
+        self.enable_galaxy_ai();
 
         // Main loop runs until game ends OR stop requested
         while !self.should_stop.load(Ordering::Relaxed) && self.state.should_continue() {
@@ -287,6 +293,7 @@ impl Orchestrator {
             if self.state.is_running() {
                 self.poll_all_messages();
                 self.periodic_tasks();
+                self.run_galaxy_ai();
             }
 
             // Always update GUI (even when paused, to show pause state)
@@ -297,7 +304,7 @@ impl Orchestrator {
             }
 
             // Small sleep to prevent busy-waiting
-            std::thread::sleep(Duration::from_millis(10));
+            std::thread::sleep(Duration::from_millis(500));
         }
 
         log::info!("Orchestrator main loop stopped (game_state: {:?})", self.state.game_state());
@@ -350,34 +357,27 @@ impl Orchestrator {
         for planet_id in dead_planets {
             self.destroy_planet(planet_id);
         }
-
-        // Run Galaxy AI
-        self.run_galaxy_ai();
     }
 
     /// Runs the Galaxy AI to make decisions
     fn run_galaxy_ai(&mut self) {
-        if let Some(galaxy_ai) = &mut self.galaxy_ai {
-            let alive_planets = self.state.alive_planets_sorted();
+        let alive_planets = self.state.alive_planets_sorted();
 
-            if alive_planets.is_empty() {
-                return; // No planets to act on
+        self.galaxy_ai.update(&alive_planets);
+
+        let action = self.galaxy_ai.get_intention();
+
+        match action {
+            GalaxyAction::SendAsteroid { target_planet } => {
+                log::info!("Galaxy AI decided to send asteroid to planet {target_planet}");
+                let _ = self.send_asteroid_to_planet(*target_planet);
             }
-
-            let action = galaxy_ai.update(&alive_planets);
-
-            match action {
-                GalaxyAction::SendAsteroid { target_planet } => {
-                    log::info!("Galaxy AI decided to send asteroid to planet {target_planet}");
-                    let _ = self.send_asteroid_to_planet(target_planet);
-                }
-                GalaxyAction::SendSunray { target_planet } => {
-                    log::info!("Galaxy AI decided to send sunray to planet {target_planet}");
-                    self.send_sunray_to_planet(target_planet);
-                }
-                GalaxyAction::DoNothing => {
-                    // AI chose to do nothing this cycle
-                }
+            GalaxyAction::SendSunray { target_planet } => {
+                log::info!("Galaxy AI decided to send sunray to planet {target_planet}");
+                self.send_sunray_to_planet(*target_planet);
+            }
+            GalaxyAction::DoNothing => {
+                // AI chose to do nothing this cycle
             }
         }
     }
@@ -388,9 +388,10 @@ impl Orchestrator {
     }
 
     /// Stops the orchestrator gracefully.
-    pub fn stop(&self) {
+    pub fn stop(&mut self) {
         log::info!("Stopping orchestrator...");
         self.should_stop.store(true, Ordering::Relaxed);
+        self.disable_galaxy_ai();
 
         for (planet_id, sender) in &self.planet_senders {
             let _ = sender.send(OrchestratorToPlanet::KillPlanet);

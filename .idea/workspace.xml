@@ -12,15 +12,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="668d04bc-8fc4-424c-8f8d-c6c91eedaeb2" name="Changes" comment="added tests (not well commented) and some stuff is now public in the orchestrator">
-      <change afterPath="$PROJECT_DIR$/Files.zip" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/orchestrator/galaxy.rs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Cargo.lock" beforeDir="false" afterPath="$PROJECT_DIR$/Cargo.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Cargo.toml" beforeDir="false" afterPath="$PROJECT_DIR$/Cargo.toml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/orchestrator/mod.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/orchestrator/mod.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/orchestrator/galaxy_ai.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/orchestrator/galaxy_ai.rs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/orchestrator/orchestrator.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/orchestrator/orchestrator.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/orchestrator/state.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/orchestrator/state.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/orchestrator/tests/orchestrator_tests.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/orchestrator/tests/orchestrator_tests.rs" afterDir="false" />
     </list>
     <list id="c3b1074b-0d0e-4959-a2fd-cc356ffda3f6" name="Changes by hp" comment="" />
     <option name="SHOW_DIALOG" value="false" />
@@ -48,7 +42,7 @@
   <component name="GithubPullRequestsUISettings">{
   &quot;selectedUrlAndAccountId&quot;: {
     &quot;url&quot;: &quot;https://github.com/luna4-ap2025/Orchestrator.git&quot;,
-    &quot;accountId&quot;: &quot;588d79f3-74b6-443d-8fa8-a24f4cc48786&quot;
+    &quot;accountId&quot;: &quot;a3c02860-dc5b-48b5-82df-52096d3065f9&quot;
   }
 }</component>
   <component name="MacroExpansionManager">
@@ -86,6 +80,7 @@
     &quot;com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultAutoModeForALLUsers.v1&quot;: &quot;true&quot;,
     &quot;com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1&quot;: &quot;true&quot;,
     &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
     &quot;junie.onboarding.icon.badge.shown&quot;: &quot;true&quot;,
     &quot;last_opened_file_path&quot;: &quot;D:/S2k in your area/pelatone/Orchestrator&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
@@ -229,6 +224,9 @@
       <workItem from="1769794620676" duration="8109000" />
       <workItem from="1769901491037" duration="3967000" />
       <workItem from="1769957527188" duration="5901000" />
+      <workItem from="1769984646778" duration="1278000" />
+      <workItem from="1770023695957" duration="5000" />
+      <workItem from="1770038733898" duration="8877000" />
     </task>
     <task id="LOCAL-00001" summary="test">
       <option name="closed" value="true" />

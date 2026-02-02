@@ -5,10 +5,12 @@
 
 use common_game::utils::ID;
 use rand::Rng;
+use crate::orchestrator::galaxy_ai::AIPhase::{Calm, Chaotic, Destructive, Dormant, Prosperous};
+use crate::orchestrator::galaxy_ai::GalaxyAction::{DoNothing, SendAsteroid, SendSunray};
 
 /// Actions that the Galaxy AI can take
 #[derive(Debug, Clone, PartialEq, Eq)]
-pub enum GalaxyAction {
+pub(crate) enum GalaxyAction {
     /// Send an asteroid to attack a planet
     SendAsteroid {
         /// Target planet ID
@@ -25,213 +27,166 @@ pub enum GalaxyAction {
 
 /// Strategy that the Galaxy AI uses to make decisions
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
-pub enum AIStrategy {
-    /// Always attacks (sends asteroids)
-    Aggressive,
-    /// Always helps (sends sunrays)
-    Benevolent,
-    /// Randomly chooses between asteroid, sunray, or nothing
-    Random,
-    /// Alternates between attacking and helping
-    Balanced,
-    /// Does nothing (passive)
-    Passive,
+pub(crate) enum AIPhase {
+    /// 50% sunrays 10% asteroids 40% nothing
+    Prosperous,
+    /// 10% sunrays 50% asteroids 40% nothing
+    Destructive,
+    /// 40% sunrays 60% asteroids
+    Chaotic,
+    /// 30% sunrays 10% asteroids 60% nothing
+    Calm,
+    /// 100% nothing, default phase
+    Dormant,
 }
 
-/// Galaxy AI that observes the game state and makes decisions
+/// Galaxy AI that decides which planets get either a sunray or an asteroid, mostly random
 #[derive(Debug, Clone)]
-pub struct GalaxyAI {
+pub(crate) struct GalaxyAI {
     /// Current intention/action to take
-    current_intention: Option<GalaxyAction>,
+    current_intention: GalaxyAction,
     /// Strategy being used
-    strategy: AIStrategy,
+    phase: AIPhase,
     /// Cycle counter for balanced strategy
-    cycle_count: u32,
-    /// Probability of taking action (0.0 to 1.0)
-    action_probability: f32,
+    current_phase_length: u32,
+    /// Should change phase on update
+    phase_change: bool,
 }
 
 impl GalaxyAI {
-    /// Creates a new Galaxy AI with the specified strategy
+    /// Creates a new Galaxy AI that is dormant and will wake in the next cycle
     #[must_use]
-    pub fn new(strategy: AIStrategy) -> Self {
+    pub fn new() -> Self {
         Self {
-            current_intention: None,
-            strategy,
-            cycle_count: 0,
-            action_probability: 0.3, // 30% chance per cycle by default
+            current_intention: DoNothing,
+            phase: Dormant,
+            current_phase_length: 0,
+            phase_change: false,
         }
     }
 
-    /// Creates an aggressive AI (always attacks)
-    #[must_use]
-    pub fn aggressive() -> Self {
-        Self::new(AIStrategy::Aggressive)
+    ///Set the current phase with a random length and active phase change
+    fn change_phase_random(&mut self) {
+        self.phase = Self::random_phase();
+        self.current_phase_length = Self::random_phase_length();
+        self.phase_change = true;
     }
 
-    /// Creates a benevolent AI (always helps)
-    #[must_use]
-    pub fn benevolent() -> Self {
-        Self::new(AIStrategy::Benevolent)
+    ///Set the current phase with a custom phase length and phase change
+    pub fn set_ai(&mut self, phase: AIPhase, phase_length: u32, phase_change: bool) {
+        self.phase = phase;
+        self.current_phase_length = phase_length;
+        self.phase_change = phase_change;
     }
 
-    /// Creates a random AI
-    #[must_use]
-    pub fn random() -> Self {
-        Self::new(AIStrategy::Random)
+    ///Enable the ai by setting phase change to true and phase length to 0
+    pub fn enable_ai (&mut self) {
+        self.set_ai(Dormant, 0, true);
     }
 
-    /// Creates a balanced AI (alternates)
-    #[must_use]
-    pub fn balanced() -> Self {
-        Self::new(AIStrategy::Balanced)
+    ///Disable the ai by setting the phase change to false and the phase to dormant
+    pub fn disable_ai (&mut self) {
+        self.set_ai(Dormant, 0, false);
     }
 
-    /// Creates a passive AI (does nothing)
-    #[must_use]
-    pub fn passive() -> Self {
-        Self::new(AIStrategy::Passive)
+    ///change current intention
+    fn set_intention(&mut self, intention: GalaxyAction) {
+        self.current_intention = intention;
     }
 
-    /// Sets the probability of taking action each cycle (0.0 to 1.0)
-    #[must_use]
-    pub fn with_action_probability(mut self, probability: f32) -> Self {
-        self.action_probability = probability.clamp(0.0, 1.0);
-        self
+    ///Generate a phase length between 100 and 1000 cycles
+    fn random_phase_length() -> u32 {
+        rand::rng().random_range(100..1001) as u32
     }
 
-    /// Updates the AI with current game state and returns the next action
-    ///
-    /// # Arguments
-    /// * `alive_planets` - List of currently alive planet IDs
-    ///
-    /// # Returns
-    /// The action to take this cycle (if any)
-    pub fn update(&mut self, alive_planets: &[ID]) -> GalaxyAction {
-        self.cycle_count += 1;
+    ///Selects an optional random planet ID from the given list
+    fn select_random_planet (planet_list: &[ID]) -> Option<ID> {
+        if planet_list.is_empty() {
+            None
+        }else {
+            let index = rand::rng().random_range(0..planet_list.len());
+            Some(planet_list[index])
+        }
+    }
 
-        // If no planets alive, do nothing
-        if alive_planets.is_empty() {
-            self.current_intention = Some(GalaxyAction::DoNothing);
-            return GalaxyAction::DoNothing;
+    ///Generate a random action with parameters
+    fn random_action_integer_percent(send_sunray: u32, send_asteroid: u32, do_nothing: u32, planet_list: &[ID]) -> GalaxyAction {
+        if send_sunray + send_asteroid + do_nothing != 100 {
+            DoNothing
+
+        }else {
+            let planet = Self::select_random_planet(planet_list);
+
+            match planet {
+                //If planet list is empty do nothing
+                None => {
+                    DoNothing
+                }
+                Some(planet_id) => {
+                    let rng = rand::rng().random_range(0..101);
+
+                    if rng <= send_sunray {
+                        SendSunray {target_planet: planet_id}
+                    }else if rng <= send_asteroid {
+                        SendAsteroid {target_planet: planet_id}
+                    }else {
+                        DoNothing
+                    }
+                }
+            }
+        }
+    }
+
+    ///Generate a random phase, dormant phase is a result only in case of rng error
+    fn random_phase() -> AIPhase {
+        let rng = rand::rng().random_range(0..5);
+        match rng {
+            0 => Prosperous,
+            1 => Destructive,
+            3 => Chaotic,
+            4 => Calm,
+            _ => Dormant,
+        }
+    }
+
+    ///Update method to change phase and intentions every cycle based on current planet list
+    pub fn update (&mut self, planet_list: &[ID]) {
+        //if phase change is true update the phase
+        if self.get_phase_change() == &true {
+            //if current phase length is 0 change phase and generate a new phase length, otherwise decrease length by 1
+            if self.get_current_phase_length() == &0 {
+                self.change_phase_random();
+            }else {
+                self.current_phase_length = self.current_phase_length - 1;
+            }
         }
 
-        // Decide action based on strategy
-        let action = match self.strategy {
-            AIStrategy::Aggressive => self.decide_aggressive(alive_planets),
-            AIStrategy::Benevolent => self.decide_benevolent(alive_planets),
-            AIStrategy::Random => self.decide_random(alive_planets),
-            AIStrategy::Balanced => self.decide_balanced(alive_planets),
-            AIStrategy::Passive => GalaxyAction::DoNothing,
+        //match current phase and change intention based on a predetermined set of percentage chances
+        match self.phase{
+            Dormant => {self.set_intention(GalaxyAction::DoNothing)},
+            Prosperous => {self.set_intention(Self::random_action_integer_percent(50,10,40, planet_list)) },
+            Destructive => {self.set_intention(Self::random_action_integer_percent(10,50,40, planet_list))},
+            Chaotic => {self.set_intention(Self::random_action_integer_percent(40,60,0, planet_list))},
+            Calm => {self.set_intention(Self::random_action_integer_percent(30,10,60, planet_list))},
         };
-
-        self.current_intention = Some(action.clone());
-        action
     }
 
-    /// Aggressive strategy: attack random planet
-    fn decide_aggressive(&self, alive_planets: &[ID]) -> GalaxyAction {
-        if self.should_take_action() {
-            let target = self.pick_random_planet(alive_planets);
-            GalaxyAction::SendAsteroid {
-                target_planet: target,
-            }
-        } else {
-            GalaxyAction::DoNothing
-        }
+    ///Get methods for internal variables
+    pub fn get_phase(&self) -> &AIPhase {
+        &self.phase
     }
 
-    /// Benevolent strategy: help random planet
-    fn decide_benevolent(&self, alive_planets: &[ID]) -> GalaxyAction {
-        if self.should_take_action() {
-            let target = self.pick_random_planet(alive_planets);
-            GalaxyAction::SendSunray {
-                target_planet: target,
-            }
-        } else {
-            GalaxyAction::DoNothing
-        }
+    pub fn get_intention(&self) -> &GalaxyAction {
+        &self.current_intention
     }
 
-    /// Random strategy: randomly pick asteroid, sunray, or nothing
-    fn decide_random(&self, alive_planets: &[ID]) -> GalaxyAction {
-        if !self.should_take_action() {
-            return GalaxyAction::DoNothing;
-        }
-
-        let mut rng = rand::thread_rng();
-        let choice = rng.gen_range(0..3);
-        let target = self.pick_random_planet(alive_planets);
-
-        match choice {
-            0 => GalaxyAction::SendAsteroid {
-                target_planet: target,
-            },
-            1 => GalaxyAction::SendSunray {
-                target_planet: target,
-            },
-            _ => GalaxyAction::DoNothing,
-        }
+    pub fn get_current_phase_length(&self) -> &u32 {
+        &self.current_phase_length
     }
 
-    /// Balanced strategy: alternate between asteroid and sunray
-    fn decide_balanced(&self, alive_planets: &[ID]) -> GalaxyAction {
-        if !self.should_take_action() {
-            return GalaxyAction::DoNothing;
-        }
-
-        let target = self.pick_random_planet(alive_planets);
-
-        if self.cycle_count % 2 == 0 {
-            GalaxyAction::SendAsteroid {
-                target_planet: target,
-            }
-        } else {
-            GalaxyAction::SendSunray {
-                target_planet: target,
-            }
-        }
+    pub fn get_phase_change(&self) -> &bool {
+        &self.phase_change
     }
 
-    /// Determines if action should be taken based on probability
-    fn should_take_action(&self) -> bool {
-        let mut rng = rand::thread_rng();
-        rng.gen::<f32>() < self.action_probability
-    }
 
-    /// Picks a random planet from the list
-    fn pick_random_planet(&self, alive_planets: &[ID]) -> ID {
-        let mut rng = rand::thread_rng();
-        let index = rng.gen_range(0..alive_planets.len());
-        alive_planets[index]
-    }
-
-    /// Gets the current intention
-    #[must_use]
-    pub fn current_intention(&self) -> Option<&GalaxyAction> {
-        self.current_intention.as_ref()
-    }
-
-    /// Gets the current strategy
-    #[must_use]
-    pub fn strategy(&self) -> AIStrategy {
-        self.strategy
-    }
-
-    /// Changes the AI strategy
-    pub fn set_strategy(&mut self, strategy: AIStrategy) {
-        self.strategy = strategy;
-    }
-
-    /// Gets the cycle count
-    #[must_use]
-    pub fn cycle_count(&self) -> u32 {
-        self.cycle_count
-    }
-}
-
-impl Default for GalaxyAI {
-    fn default() -> Self {
-        Self::random()
-    }
 }
