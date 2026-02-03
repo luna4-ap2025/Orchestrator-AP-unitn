@@ -23,22 +23,16 @@ pub fn handle_travel_request(
         "Handling travel request: explorer {explorer_id} from {from_planet_id} to {to_planet_id}"
     );
 
-    // Validate adjacency
+    // Validate adjacency and alive planets
     if !orchestrator.state.can_travel(from_planet_id, to_planet_id) {
         log::warn!("Travel request rejected: planets not adjacent or some are dead");
-
-        if let Some(tx) = orchestrator.explorer_senders.get(&explorer_id) {
-            let _ = tx.send(OrchestratorToExplorer::MoveToPlanet {
-                sender_to_new_planet: None,
-                planet_id : from_planet_id,
-            });
-        }
-
-        let _ = orchestrator.gui_event_sender.send(GuiEvent::ExplorerMoveRejected(
+        send_rejection(
+            orchestrator,
             explorer_id,
+            from_planet_id,
             to_planet_id,
-            "Planets are not adjacent or some are dead".to_string(),
-        ));
+            "Planets not adjacent or dead",
+        );
         return;
     }
 
@@ -46,19 +40,31 @@ pub fn handle_travel_request(
     let (planet_to_explorer_sender, _planet_to_explorer_receiver) = unbounded::<PlanetToExplorer>();
     let (explorer_to_planet_sender, _explorer_to_planet_receiver) = unbounded::<ExplorerToPlanet>();
 
-    // Notify destination planet (give it PlanetToExplorer sender)
+    // Notify destination planet
     if let Some(dest_tx) = orchestrator.planet_senders.get(&to_planet_id) {
         if dest_tx.send(OrchestratorToPlanet::IncomingExplorerRequest {
             explorer_id,
-            new_sender: planet_to_explorer_sender, // CORRECT: Sender<PlanetToExplorer>
+            new_sender: planet_to_explorer_sender,
         }).is_err() {
-            log::error!("Failed to notify destination planet");
-            send_rejection(orchestrator, explorer_id, to_planet_id, "Destination planet unreachable");
+            log::error!("Failed to notify destination planet {to_planet_id}");
+            send_rejection(
+                orchestrator,
+                explorer_id,
+                from_planet_id,
+                to_planet_id,
+                "Destination planet unreachable",
+            );
             return;
         }
     } else {
-        log::error!("Destination planet not found");
-        send_rejection(orchestrator, explorer_id, to_planet_id, "Destination planet not found");
+        log::error!("Destination planet not found: {to_planet_id}");
+        send_rejection(
+            orchestrator,
+            explorer_id,
+            from_planet_id,
+            to_planet_id,
+            "Destination planet not found",
+        );
         return;
     }
 
@@ -70,18 +76,23 @@ pub fn handle_travel_request(
     // Update system state
     if let Err(e) = orchestrator.state.move_explorer(explorer_id, from_planet_id, to_planet_id) {
         log::error!("Failed to update system state: {e}");
-        send_rejection(orchestrator, explorer_id, to_planet_id, &format!("State update failed: {e}"));
+        send_rejection(
+            orchestrator,
+            explorer_id,
+            from_planet_id,
+            to_planet_id,
+            &format!("State update failed: {e}"),
+        );
         return;
     }
 
-    // Notify explorer (give it ExplorerToPlanet sender)
+    // Notify explorer
     if let Some(tx) = orchestrator.explorer_senders.get(&explorer_id) {
         if tx.send(OrchestratorToExplorer::MoveToPlanet {
-            sender_to_new_planet: Some(explorer_to_planet_sender), // CORRECT: Sender<ExplorerToPlanet>
-            planet_id : from_planet_id,
+            sender_to_new_planet: Some(explorer_to_planet_sender),
+            planet_id: to_planet_id,
         }).is_err() {
-            log::error!("Failed to notify explorer");
-
+            log::error!("Failed to notify explorer {explorer_id}");
             // Rollback state
             let _ = orchestrator.state.move_explorer(explorer_id, to_planet_id, from_planet_id);
 
@@ -92,37 +103,38 @@ pub fn handle_travel_request(
             ));
         } else {
             log::info!("Explorer {explorer_id} successfully moved to planet {to_planet_id}");
-
             let _ = orchestrator.gui_event_sender.send(GuiEvent::ExplorerMoved(
                 explorer_id,
                 from_planet_id,
                 to_planet_id,
             ));
 
-            // Note: The receivers (explorer_to_planet_receiver and planet_to_explorer_receiver)
-            // need to be passed to the actors through some other mechanism.
-            // This is a design limitation in the current protocol.
+            // Note: Receivers (_planet_to_explorer_receiver, _explorer_to_planet_receiver)
+            // need to be passed to actors via proper actor initialization (per protocol)
         }
     } else {
-        log::error!("Explorer not found in senders map");
-
-        // Rollback state
+        log::error!("Explorer sender not found for {explorer_id}");
         let _ = orchestrator.state.move_explorer(explorer_id, to_planet_id, from_planet_id);
-
         let _ = orchestrator.gui_event_sender.send(GuiEvent::ExplorerMoveRejected(
             explorer_id,
             to_planet_id,
-            "Explorer channel not found".to_string(),
+            "Explorer sender not found".to_string(),
         ));
     }
 }
 
-/// Helper function to send rejection notifications
-fn send_rejection(orchestrator: &Orchestrator, explorer_id: ID, to_planet_id: ID, reason: &str) {
+/// Helper function to send rejection notifications to both explorer and GUI
+fn send_rejection(
+    orchestrator: &Orchestrator,
+    explorer_id: ID,
+    from_planet_id: ID,
+    to_planet_id: ID,
+    reason: &str,
+) {
     if let Some(tx) = orchestrator.explorer_senders.get(&explorer_id) {
         let _ = tx.send(OrchestratorToExplorer::MoveToPlanet {
             sender_to_new_planet: None,
-            planet_id: to_planet_id,
+            planet_id: from_planet_id,
         });
     }
 

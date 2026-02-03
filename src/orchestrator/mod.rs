@@ -1,21 +1,26 @@
 //! Main orchestrator module.
 //!
-//! This module contains all the components needed to coordinate the space
+//! This module contains the internal components used to coordinate the space
 //! simulation, including planet management, explorer control, message routing,
-//! and GUI integration.
+//! and optional GUI integration.
+//!
+//! Only a small, well-defined public API is exposed. All other modules are
+//! considered internal implementation details.
 
 pub mod routing;
-pub mod state;
 pub mod planet_control;
 pub mod explorer_control;
 pub mod gui_interface;
 
+// Rendi pubblici i moduli interni che vuoi usare fuori dal crate
+pub mod state;
+pub mod orchestrator;
+pub mod galaxy_structure;
+pub mod galaxy_ai;
 
-
-mod orchestrator;
-mod galaxy_structure;
-mod galaxy_ai;
-
+/// Main orchestrator entry point.
 pub use orchestrator::Orchestrator;
+/// Snapshot of the orchestrator internal state.
 pub use state::SystemState;
-pub use gui_interface::{GuiEvent, GuiState};
+/// Galaxy topology structure.
+pub use galaxy_structure::GalaxyStructure;

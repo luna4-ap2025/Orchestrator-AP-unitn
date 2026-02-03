@@ -3,23 +3,6 @@
 version = 4
 
 [[package]]
-name = "Orchestrator"
-version = "0.1.0"
-dependencies = [
- "anyhow",
- "bevy",
- "common-game",
- "crossbeam-channel",
- "env_logger",
- "lazy_static",
- "log",
- "rand",
- "serde",
- "thiserror 2.0.17",
- "tokio",
-]
-
-[[package]]
 name = "ab_glyph"
 version = "0.2.32"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2797,6 +2780,23 @@ checksum = "52ad2c6bae700b7aa5d1cc30c59bdd3a1c180b09dbaea51e2ae2b8e1cf211fdd"
 dependencies = [
  "libc",
  "libredox",
+]
+
+[[package]]
+name = "orchestrator"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "bevy",
+ "common-game",
+ "crossbeam-channel",
+ "env_logger",
+ "lazy_static",
+ "log",
+ "rand",
+ "serde",
+ "thiserror 2.0.17",
+ "tokio",
 ]
 
 [[package]]

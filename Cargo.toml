@@ -1,9 +1,13 @@
 [package]
-name = "Orchestrator"
+name = "orchestrator"          # sempre minuscolo!
 version = "0.1.0"
 edition = "2021"
 license = "MIT"
+authors = ["Tuo Nome <tuo@email.com>"]
 
+# ===========================================================
+# Dipendenze di runtime
+# ===========================================================
 [dependencies]
 common-game = "3.0.0-rc.1"
 crossbeam-channel = "0.5"
@@ -14,7 +18,16 @@ tokio = { version = "1.0", features = ["full"] }
 serde = { version = "1.0.228", features = ["derive"] }
 lazy_static = "1.4"
 anyhow = "1.0"
-rand = "0.9"  # Changed from 0.8 to 0.9
+rand = "0.9"
 
+# ===========================================================
+# Dipendenze di sviluppo
+# ===========================================================
 [dev-dependencies]
 bevy = "0.13"
+
+# ===========================================================
+# Se vuoi pubblicare come crate, togli il riferimento locale
+# alle versioni non necessarie, altrimenti non serve
+# il vecchio 'orchestrator = "0.2.2"'
+# ===========================================================

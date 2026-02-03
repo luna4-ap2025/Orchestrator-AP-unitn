@@ -1,21 +1,23 @@
 //! # Orchestrator Library - Luna4 Group
 //!
-//! This library provides the main Orchestrator implementation for the AP galaxy simulation game.
-//! The Orchestrator coordinates communication between planets and explorers, manages the
-//! galaxy topology, and provides a GUI-friendly interface for visualization.
+//! This crate provides the **Orchestrator implementation** for the AP galaxy
+//! simulation game.
 //!
-//! ## Key Components
-//!
-//! - Orchestrator (orchestrator::Orchestrator): Main orchestrator struct
-//! - SystemState (orchestrator::state::SystemState): Galaxy state tracking
-//! - GUI integration through GuiEvent (orchestrator::gui_interface::GuiEvent) system
+//! It is an application-level crate, not a shared common library.
+//! Its public API is intentionally small and limited to the [`Orchestrator`] type.
 
 #![warn(missing_docs)]
 #![warn(clippy::pedantic)]
 #![allow(clippy::module_name_repetitions)]
 
-pub mod logging;
-pub mod orchestrator;
+pub(crate) mod logging;
+pub(crate) mod orchestrator;
 
-/// Re-export commonly used types for convenience
+/// Main entry point of the orchestrator system.
 pub use orchestrator::Orchestrator;
+
+/// Re-export SystemState so it can be used externally
+pub use orchestrator::state::SystemState;
+
+/// Re-export GalaxyStructure so it can be used externally
+pub use orchestrator::galaxy_structure::GalaxyStructure;
