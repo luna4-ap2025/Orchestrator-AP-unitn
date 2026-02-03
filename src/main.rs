@@ -1,73 +1,88 @@
-use orchestrator::{SystemState, Orchestrator, GalaxyStructure};
+use crossbeam_channel::{unbounded, Sender, Receiver};
+use std::thread;
 use common_game::utils::ID;
-use std::fs::File;
-use std::io::{BufRead, BufReader};
-use std::path::Path;
+use orchestrator::SystemState;
+use orchestrator::Orchestrator;
+use common_game::protocols::planet_orchestrator::{OrchestratorToPlanet, PlanetToOrchestrator};
+
+// Pianeti come librerie
+use orbitron;
+use skycartel;
+use rustrelli;
+use the_compiler_strikes_back;
+use planet as crabtorio;
+use Planet as houston;
+use enterprise;
 
 fn main() {
-    // ===== File di inizializzazione =====
-    // Deve contenere: pianeti e le loro connessioni (ID separati da spazi)
-    // Esempio contenuto per 7 pianeti:
-    // 1 2 3
-    // 2 1 4
-    // 3 1 4
-    // 4 2 3 5
-    // 5 4 6 7
-    // 6 5
-    // 7 5
-    let init_file_path = "init_galaxy.txt";
-
-    // Legge tutte le linee dal file
-    let planet_lines: Vec<String> =
-        read_lines(init_file_path).expect("Errore nella lettura del file di inizializzazione");
-
-    // ===== Inizializza lo stato del sistema =====
+    // Sistema dello stato del gioco
     let mut system_state = SystemState::new();
 
-    // ===== Aggiunge pianeti e connessioni =====
-    let galaxy_structure = GalaxyStructure::new_from_file(&planet_lines);
-    for &planet_id in galaxy_structure.get_alive_planets() {
-        // aggiunge pianeta nello state
-        system_state.add_planet(planet_id);
+    // Lista di pianeti e thread handles
+    let mut handles = vec![];
 
-        // aggiunge connessioni con pianeti adiacenti
-        let adjacents = galaxy_structure
-            .get_adjacents(planet_id)
-            .iter()
-            .copied()
-            .collect::<Vec<ID>>();
+    // Struttura per tenere i canali pianeta <-> orchestratore
+    struct PlanetChannels {
+        tx_to_orchestrator: Sender<PlanetToOrchestrator>,
+        rx_from_orchestrator: Receiver<OrchestratorToPlanet>,
+    }
+    let mut planet_channels: std::collections::HashMap<ID, PlanetChannels> = std::collections::HashMap::new();
 
-        for &adj in &adjacents {
-            system_state.add_adjacency(planet_id, adj);
+    // Funzione helper per spawnare un pianeta
+    fn spawn_planet<F>(
+        id: ID,
+        start_fn: F,
+        planet_channels: &mut std::collections::HashMap<ID, PlanetChannels>,
+    ) -> thread::JoinHandle<()>
+    where
+        F: FnOnce(Sender<PlanetToOrchestrator>, Receiver<OrchestratorToPlanet>) + Send + 'static,
+    {
+        let (tx_to_orchestrator, rx_from_planet) = unbounded();
+        let (tx_to_planet, rx_from_orchestrator) = unbounded();
+
+        planet_channels.insert(id, PlanetChannels {
+            tx_to_orchestrator: tx_to_orchestrator.clone(),
+            rx_from_orchestrator,
+        });
+
+        thread::spawn(move || {
+            start_fn(tx_to_orchestrator, rx_from_orchestrator);
+        })
+    }
+
+    // Avvio dei pianeti
+    handles.push(spawn_planet(1, orbitron::start, &mut planet_channels));
+    handles.push(spawn_planet(2, skycartel::start, &mut planet_channels));
+    handles.push(spawn_planet(3, rustrelli::start, &mut planet_channels));
+    handles.push(spawn_planet(4, the_compiler_strikes_back::start, &mut planet_channels));
+    handles.push(spawn_planet(5, crabtorio::start, &mut planet_channels));
+    handles.push(spawn_planet(6, houston::start, &mut planet_channels));
+    handles.push(spawn_planet(7, enterprise::start, &mut planet_channels));
+
+    // === Aggiungi esploratori nello stato ===
+    let explorers = vec![(101, 1), (102, 4)];
+    for (eid, pid) in &explorers {
+        system_state.add_explorer(*eid, *pid).expect("Errore nell'aggiunta dell'esploratore");
+    }
+
+    // === Avvio orchestratore ===
+    let mut orchestrator = Orchestrator::new(system_state);
+
+    println!("Sistema inizializzato, pianeti e esploratori avviati!");
+
+    // === Loop principale orchestratore (esempio semplice) ===
+    loop {
+        for (pid, channels) in &planet_channels {
+            while let Ok(msg) = channels.tx_to_orchestrator.try_recv() {
+                println!("Messaggio dal pianeta {}: {:?}", pid, msg);
+            }
         }
+        // Breve sleep per non bloccare la CPU
+        std::thread::sleep(std::time::Duration::from_millis(100));
     }
 
-    // ===== Aggiungi esploratori =====
-    let explorers = vec![(101, 1), (102, 4)]; // (explorer_id, planet_id)
-    for (eid, pid) in &explorers {
-        system_state
-            .add_explorer(*eid, *pid)
-            .expect("Errore nell'aggiunta dell'esploratore");
-    }
-
-    // ===== Stampa stato iniziale =====
-    println!("Pianeti vivi: {:?}", system_state.get_alive_planets_sorted());
-    for (eid, pid) in &explorers {
-        println!("Esploratore {} parte dal pianeta {}", eid, pid);
-    }
-
-    // ===== Avvia orchestratore in modalità base senza GUI =====
-    let mut orchestrator = Orchestrator::new();
-
-    println!("Sistema inizializzato correttamente!");
-}
-
-/// Legge tutte le linee di un file in un vettore di stringhe
-fn read_lines<P>(filename: P) -> Result<Vec<String>, std::io::Error>
-where
-    P: AsRef<Path>,
-{
-    let file = File::open(filename)?;
-    let reader = BufReader::new(file);
-    reader.lines().collect()
+    // Se vuoi attendere la fine dei thread dei pianeti
+    // for handle in handles {
+    //     handle.join().unwrap();
+    // }
 }

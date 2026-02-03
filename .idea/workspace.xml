@@ -11,10 +11,9 @@
     </cargoProject>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="668d04bc-8fc4-424c-8f8d-c6c91eedaeb2" name="Changes" comment="finally is a binary">
+    <list default="true" id="668d04bc-8fc4-424c-8f8d-c6c91eedaeb2" name="Changes" comment="added planets and explorer dependencies">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Cargo.lock" beforeDir="false" afterPath="$PROJECT_DIR$/Cargo.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Cargo.toml" beforeDir="false" afterPath="$PROJECT_DIR$/Cargo.toml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/main.rs" afterDir="false" />
     </list>
     <list id="c3b1074b-0d0e-4959-a2fd-cc356ffda3f6" name="Changes by hp" comment="" />
     <option name="SHOW_DIALOG" value="false" />
@@ -353,7 +352,15 @@
       <option name="project" value="LOCAL" />
       <updated>1770140533913</updated>
     </task>
-    <option name="localTasksCounter" value="16" />
+    <task id="LOCAL-00016" summary="added planets and explorer dependencies">
+      <option name="closed" value="true" />
+      <created>1770157378992</created>
+      <option name="number" value="00016" />
+      <option name="presentableId" value="LOCAL-00016" />
+      <option name="project" value="LOCAL" />
+      <updated>1770157378992</updated>
+    </task>
+    <option name="localTasksCounter" value="17" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -385,7 +392,8 @@
     <MESSAGE value="fixed minor naming issues and added more logging, no obvious errors remain" />
     <MESSAGE value="Orchestrator can now be generated with given message channels and galaxy initialization file; galaxy AI can now be initialized as active or inactive" />
     <MESSAGE value="finally is a binary" />
-    <option name="LAST_COMMIT_MESSAGE" value="finally is a binary" />
+    <MESSAGE value="added planets and explorer dependencies" />
+    <option name="LAST_COMMIT_MESSAGE" value="added planets and explorer dependencies" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />
