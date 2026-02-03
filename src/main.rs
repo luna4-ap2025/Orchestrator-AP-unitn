@@ -3,7 +3,7 @@ use std::thread;
 use common_game::utils::ID;
 use orchestrator::SystemState;
 use orchestrator::Orchestrator;
-use common_game::protocols::planet_orchestrator::{OrchestratorToPlanet, PlanetToOrchestrator};
+use common_game::protocols::orchestrator_planet::{OrchestratorToPlanet, PlanetToOrchestrator};
 
 // Pianeti come librerie
 use orbitron;
