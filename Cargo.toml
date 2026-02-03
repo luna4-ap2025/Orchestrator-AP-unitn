@@ -1,33 +1,24 @@
 [package]
-name = "orchestrator"          # sempre minuscolo!
+name = "orchestrator"
 version = "0.1.0"
 edition = "2021"
 license = "MIT"
-authors = ["Tuo Nome <tuo@email.com>"]
 
-# ===========================================================
-# Dipendenze di runtime
-# ===========================================================
 [dependencies]
 common-game = "3.0.0-rc.1"
 crossbeam-channel = "0.5"
-thiserror = "2.0"
 log = "0.4"
 env_logger = "0.11"
-tokio = { version = "1.0", features = ["full"] }
 serde = { version = "1.0.228", features = ["derive"] }
-lazy_static = "1.4"
-anyhow = "1.0"
 rand = "0.9"
+orbitron = { git = "https://github.com/Advanced-Programming-2025-Orbitron/Orbitron.git" }
+skycartel = { git = "https://github.com/0TH08/Skycartel.git" }
+rustrelli = { git = "https://github.com/Rustrelli/rustrelli.git"}
+the-compiler-strikes-back = { git = "https://github.com/TheCompilerStrikesBackAP2025/TheCompilerStrikesBack.git"}
+planet = { git = "https://github.com/crabtorio/crabtorio.git"}
+Planet = { git = "https://github.com/Houston-we-have-a-borrow/Planet.git"}
+enterprise = { git = "https://github.com/Thompspsps/Enterprise_planet.git"}
+explorer_astronaut = { git = "https://github.com/vivis2kuni/explorer_viviana.git"}
 
-# ===========================================================
-# Dipendenze di sviluppo
-# ===========================================================
 [dev-dependencies]
 bevy = "0.13"
-
-# ===========================================================
-# Se vuoi pubblicare come crate, togli il riferimento locale
-# alle versioni non necessarie, altrimenti non serve
-# il vecchio 'orchestrator = "0.2.2"'
-# ===========================================================
