@@ -11,7 +11,7 @@ use serde::{Deserialize, Serialize};
 
 /// Actions that the Galaxy AI can take
 #[derive(Debug, Clone, PartialEq, Eq)]
-pub(crate) enum GalaxyAction {
+pub enum GalaxyAction {
     /// Send an asteroid to attack a planet
     SendAsteroid { target_planet: ID },
     /// Send a sunray to help a planet
@@ -22,7 +22,7 @@ pub(crate) enum GalaxyAction {
 
 /// Strategy that the Galaxy AI uses to make decisions
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
-pub(crate) enum AIPhase {
+pub enum AIPhase {
     /// 50% sunrays, 10% asteroids, 40% nothing
     Prosperous,
     /// 10% sunrays, 50% asteroids, 40% nothing
@@ -37,7 +37,7 @@ pub(crate) enum AIPhase {
 
 /// Galaxy AI that decides which planets get either a sunray or an asteroid, mostly random
 #[derive(Debug, Clone)]
-pub(crate) struct GalaxyAI {
+pub struct GalaxyAI {
     /// Current intention/action to take
     current_intention: GalaxyAction,
     /// Strategy being used

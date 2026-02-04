@@ -9,10 +9,10 @@ use common_game::protocols::orchestrator_explorer::ExplorerToOrchestrator;
 use common_game::utils::ID;
 
 use crate::orchestrator::Orchestrator;
-use crate::orchestrator::routing;
+use super::routing;
 
 /// Handles incoming messages from an explorer.
-pub fn handle_explorer_msg(
+pub(crate) fn handle_explorer_msg(
     orchestrator: &mut Orchestrator,
     explorer_id: ID,
     msg: ExplorerToOrchestrator<GenericResource>,

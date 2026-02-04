@@ -6,7 +6,7 @@
 
 use serde::{Deserialize, Serialize};
 use common_game::utils::ID;
-use crate::orchestrator::galaxy_ai::AIPhase;
+pub(crate) use crate::orchestrator::galaxy_ai::AIPhase;
 use crate::orchestrator::state::SystemState;
 use std::fmt::Display;
 

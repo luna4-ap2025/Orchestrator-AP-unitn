@@ -7,14 +7,27 @@
     <cargoProject FILE="$PROJECT_DIR$/Cargo.toml">
       <package file="$PROJECT_DIR$">
         <feature name="default" enabled="true" />
+        <feature name="bevy" enabled="true" />
+        <feature name="gui" enabled="true" />
+        <feature name="bevy_egui" enabled="true" />
       </package>
     </cargoProject>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="668d04bc-8fc4-424c-8f8d-c6c91eedaeb2" name="Changes" comment="added planets and explorer dependencies">
+    <list default="true" id="668d04bc-8fc4-424c-8f8d-c6c91eedaeb2" name="Changes" comment="Organized Cargo.toml and Added GUI Optional Dependencies">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Cargo.lock" beforeDir="false" afterPath="$PROJECT_DIR$/Cargo.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Cargo.toml" beforeDir="false" afterPath="$PROJECT_DIR$/Cargo.toml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/init.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/lib.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/main.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/orchestrator/explorer_control.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/orchestrator/explorer_control.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/orchestrator/galaxy_ai.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/orchestrator/galaxy_ai.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/orchestrator/gui_interface.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/orchestrator/gui_interface.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/orchestrator/mod.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/orchestrator/mod.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/orchestrator/orchestrator.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/orchestrator/orchestrator.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/orchestrator/planet_control.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/orchestrator/planet_control.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/orchestrator/routing.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/orchestrator/routing.rs" afterDir="false" />
     </list>
     <list id="c3b1074b-0d0e-4959-a2fd-cc356ffda3f6" name="Changes by hp" comment="" />
     <option name="SHOW_DIALOG" value="false" />
@@ -39,12 +52,12 @@
     &quot;assignee&quot;: &quot;vivis2kuni&quot;
   }
 }</component>
-  <component name="GithubPullRequestsUISettings"><![CDATA[{
-  "selectedUrlAndAccountId": {
-    "url": "https://github.com/luna4-ap2025/Orchestrator.git",
-    "accountId": "d51acea7-5783-4e83-8445-c53f5ff034c9"
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/luna4-ap2025/Orchestrator.git&quot;,
+    &quot;accountId&quot;: &quot;d51acea7-5783-4e83-8445-c53f5ff034c9&quot;
   }
-}]]></component>
+}</component>
   <component name="MacroExpansionManager">
     <option name="directoryName" value="qDRWO4rp" />
   </component>
@@ -55,6 +68,9 @@
   &quot;associatedIndex&quot;: 3
 }</component>
   <component name="ProjectId" id="37zTxuE1pWjlvmMeVwTusQN9YgM" />
+  <component name="ProjectLevelVcsManager">
+    <ConfirmationsSetting value="1" id="Add" />
+  </component>
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
@@ -109,6 +125,9 @@
 }</component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\hp\RustProjects\Orchestrator\src\bin" />
+      <recent name="C:\Users\hp\RustProjects\Orchestrator\src\gui" />
+      <recent name="C:\Users\hp\RustProjects\Orchestrator\src\bin\gui" />
       <recent name="D:\S2k in your area\pelatone\Orchestrator\src" />
       <recent name="D:\S2k in your area\pelatone\Orchestrator\src\orchestrator" />
     </key>
@@ -232,6 +251,10 @@
       <workItem from="1769984646778" duration="1278000" />
       <workItem from="1770023695957" duration="5000" />
       <workItem from="1770038733898" duration="11280000" />
+      <workItem from="1770196079720" duration="2343000" />
+      <workItem from="1770199173895" duration="3109000" />
+      <workItem from="1770214112122" duration="1359000" />
+      <workItem from="1770216072977" duration="16979000" />
     </task>
     <task id="LOCAL-00001" summary="test">
       <option name="closed" value="true" />
@@ -361,7 +384,15 @@
       <option name="project" value="LOCAL" />
       <updated>1770157378992</updated>
     </task>
-    <option name="localTasksCounter" value="17" />
+    <task id="LOCAL-00017" summary="Organized Cargo.toml and Added GUI Optional Dependencies">
+      <option name="closed" value="true" />
+      <created>1770196527580</created>
+      <option name="number" value="00017" />
+      <option name="presentableId" value="LOCAL-00017" />
+      <option name="project" value="LOCAL" />
+      <updated>1770196527580</updated>
+    </task>
+    <option name="localTasksCounter" value="18" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -394,7 +425,8 @@
     <MESSAGE value="Orchestrator can now be generated with given message channels and galaxy initialization file; galaxy AI can now be initialized as active or inactive" />
     <MESSAGE value="finally is a binary" />
     <MESSAGE value="added planets and explorer dependencies" />
-    <option name="LAST_COMMIT_MESSAGE" value="added planets and explorer dependencies" />
+    <MESSAGE value="Organized Cargo.toml and Added GUI Optional Dependencies" />
+    <option name="LAST_COMMIT_MESSAGE" value="Organized Cargo.toml and Added GUI Optional Dependencies" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

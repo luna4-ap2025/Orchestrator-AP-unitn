@@ -9,11 +9,11 @@ use common_game::protocols::orchestrator_planet::OrchestratorToPlanet;
 use common_game::protocols::planet_explorer::{ExplorerToPlanet, PlanetToExplorer};
 use common_game::utils::ID;
 
-use crate::Orchestrator;
+use crate::orchestrator::Orchestrator;
 use crate::orchestrator::gui_interface::GuiEvent;
 
 /// Handles a travel request from an explorer.
-pub fn handle_travel_request(
+pub(crate) fn handle_travel_request(
     orchestrator: &mut Orchestrator,
     explorer_id: ID,
     from_planet_id: ID,
@@ -108,9 +108,7 @@ pub fn handle_travel_request(
                 from_planet_id,
                 to_planet_id,
             ));
-
-            // Note: Receivers (_planet_to_explorer_receiver, _explorer_to_planet_receiver)
-            // need to be passed to actors via proper actor initialization (per protocol)
+            
         }
     } else {
         log::error!("Explorer sender not found for {explorer_id}");

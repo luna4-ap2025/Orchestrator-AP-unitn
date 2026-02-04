@@ -20,24 +20,27 @@ use common_game::utils::ID;
 use crate::orchestrator::state::SystemState;
 use crate::orchestrator::gui_interface::{GuiEvent, GuiState, GuiCommand};
 use crate::orchestrator::galaxy_ai::*;
-use crate::orchestrator::{planet_control, explorer_control};
-use crate::orchestrator::galaxy_ai::AIPhase::Dormant;
-use crate::orchestrator::galaxy_structure::GalaxyStructure;
+
+// Import internal handlers from parent module
+use super::planet_control;
+use super::explorer_control;
+
+//use crate::orchestrator::{planet_control, explorer_control};
 
 /// Main orchestrator structure that manages the entire simulation.
 pub struct Orchestrator {
     forge: Forge,
 
     /// Planet communication channels
-    pub(crate) planet_senders: HashMap<ID, Sender<OrchestratorToPlanet>>,
+    pub planet_senders: HashMap<ID, Sender<OrchestratorToPlanet>>,
     pub(crate) planet_receivers: HashMap<ID, Receiver<PlanetToOrchestrator>>,
 
     /// Explorer communication channels
-    pub(crate) explorer_senders: HashMap<ID, Sender<OrchestratorToExplorer>>,
+    pub explorer_senders: HashMap<ID, Sender<OrchestratorToExplorer>>,
     explorer_receivers: HashMap<ID, Receiver<ExplorerToOrchestrator<GenericResource>>>,
 
     /// System state
-    pub(crate) state: SystemState,
+    pub state: SystemState,
 
     /// GUI channels
     pub(crate) gui_event_sender: Sender<GuiEvent>,
@@ -165,7 +168,7 @@ impl Orchestrator {
 
     #[must_use]
     pub fn is_galaxy_ai_enabled(&self) -> bool {
-        !(self.galaxy_ai.get_phase() == Dormant && !self.galaxy_ai.get_phase_change())
+        self.galaxy_ai.get_phase_change()
     }
 
     #[must_use]

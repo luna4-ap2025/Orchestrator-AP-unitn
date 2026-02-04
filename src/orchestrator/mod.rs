@@ -24,3 +24,12 @@ pub use orchestrator::Orchestrator;
 pub use state::SystemState;
 /// Galaxy topology structure.
 pub use galaxy_structure::GalaxyStructure;
+
+// Re-export other public types
+pub use galaxy_ai::{GalaxyAI, AIPhase, GalaxyAction};
+pub use gui_interface::{GuiState, GuiEvent, GuiCommand};
+
+// Internal use only
+pub(crate) use planet_control::handle_planet_msg;
+pub(crate) use explorer_control::handle_explorer_msg;
+pub(crate) use routing::handle_travel_request;

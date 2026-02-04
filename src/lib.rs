@@ -10,8 +10,10 @@
 #![warn(clippy::pedantic)]
 #![allow(clippy::module_name_repetitions)]
 
-pub(crate) mod logging;
-pub(crate) mod orchestrator;
+pub mod logging;
+pub mod orchestrator;
+
+//mod gui;
 
 /// Main entry point of the orchestrator system.
 pub use orchestrator::Orchestrator;
@@ -21,3 +23,8 @@ pub use orchestrator::state::SystemState;
 
 /// Re-export GalaxyStructure so it can be used externally
 pub use orchestrator::galaxy_structure::GalaxyStructure;
+
+// Re-export the main orchestrator type and public APIs
+pub use crate::orchestrator::gui_interface::GuiState;
+pub use crate::orchestrator::gui_interface::GuiEvent;
+pub use crate::orchestrator::gui_interface::GuiCommand;
