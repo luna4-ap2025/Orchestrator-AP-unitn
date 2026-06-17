@@ -183,9 +183,12 @@ fn spawn_planet_thread(
 
         // Create explorer channel
         let (_, rx_explorer) = unbounded::<common_game::protocols::planet_explorer::ExplorerToPlanet>();
-
-        // Use dummy implementation (can't access private fields in real structs)
-        dummy_planet_loop(planet_id, rx_orchestrator, tx_orchestrator);
+        match repo_name {
+            // in default use dummy implementation (can't access private fields in real structs)
+            _ => {
+                dummy_planet_loop(planet_id, rx_orchestrator, tx_orchestrator);
+            }
+        };
 
         log::info!("🌍 Planet {} thread exiting", planet_id);
     });
