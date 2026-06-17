@@ -133,7 +133,7 @@ fn spawn_all_planets(
         ("orbitron", "Advanced-Programming-2025-Orbitron/Orbitron"),
         ("skycartel", "0TH08/Skycartel"),
         ("rustrelli", "Rustrelli/rustrelli"),
-        ("the-compiler-strikes-back", "TheCompilerStrikesBackAP2025/TheCompilerStrikesBack"),
+        ("the_compiler_strikes_back", "TheCompilerStrikesBackAP2025/TheCompilerStrikesBack"),
         ("crabtorio", "crabtorio/crabtorio"),
         ("houston", "Houston-we-have-a-borrow/Planet"),
         ("enterprise", "Thompspsps/Enterprise_planet"),
@@ -184,6 +184,35 @@ fn spawn_planet_thread(
         // Create explorer channel
         let (_, rx_explorer) = unbounded::<common_game::protocols::planet_explorer::ExplorerToPlanet>();
         match repo_name {
+            orbitron => {
+                log::info!("start orbitron");
+                dummy_planet_loop(planet_id, rx_orchestrator, tx_orchestrator); //first planet
+            }
+            skycartel => {
+                log::info!("start skycartel");
+                dummy_planet_loop(planet_id, rx_orchestrator, tx_orchestrator); //first planet
+            }
+            rustrelli=> {
+                log::info!("start rustrelli");
+                dummy_planet_loop(planet_id, rx_orchestrator, tx_orchestrator);
+            }
+            the_compiler_strikes_back => {
+                log::info!("start the_compiler_strikes_back");
+                dummy_planet_loop(planet_id, rx_orchestrator, tx_orchestrator); //first planet
+            }
+           crabtorio=> {
+               log::info!("start crabtorio");
+               dummy_planet_loop(planet_id, rx_orchestrator, tx_orchestrator); //first planet
+           }
+            houston=> {
+                log::info!("start houston");
+                dummy_planet_loop(planet_id, rx_orchestrator, tx_orchestrator); //first planet
+
+            }
+            enterprise => {
+                log::info!("start enterprise");
+                dummy_planet_loop(planet_id, rx_orchestrator, tx_orchestrator); //first planet
+            }
             // in default use dummy implementation (can't access private fields in real structs)
             _ => {
                 dummy_planet_loop(planet_id, rx_orchestrator, tx_orchestrator);
