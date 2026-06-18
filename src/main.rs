@@ -40,24 +40,24 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     // Load galaxy structure
     let galaxy = load_galaxy_structure()?;
-    println!("✅ Galaxy structure loaded: {} planets", galaxy.len());
+    println!("galaxy structure loaded: {} planets", galaxy.len());
 
     // Spawn all planets (each from a different repository)
     spawn_all_planets(&mut orchestrator, &galaxy)?;
-    println!("✅ All 7 planets spawned and initialized");
+    println!("all 7 planets spawned and initialized");
 
     // Spawn explorers (2 explorers as specified)
     spawn_explorers(&mut orchestrator, &galaxy)?;
-    println!("✅ 2 explorers deployed");
+    println!("2 explorers deployed");
 
     // Enable Galaxy AI
     orchestrator.enable_galaxy_ai();
     orchestrator.set_galaxy_ai_parameters(
         AIPhase::Prosperous,
-        200, // Phase length
+        200000, // Phase length
         true, // Auto-change phases
     );
-    println!("✅ Galaxy AI enabled with Prosperous phase");
+    println!("galaxy AI enabled with prosperous phase");
 
     // Create monitoring thread
     let monitoring_tx = create_monitoring_thread(&orchestrator);
@@ -69,12 +69,12 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     interactive_console(monitoring_tx)?;
 
     // Shutdown
-    println!("\n🛑 Shutting down galaxy simulation...");
+    println!("\n exiting galaxy_simulation");
     orchestrator_handle.join()
         .map_err(|_| "Failed to join orchestrator thread")?
         .map_err(|e| format!("Orchestrator error: {}", e))?;
 
-    println!("✅ Simulation completed successfully!");
+    println!("simulation completed successfully!");
     Ok(())
 }
 
@@ -108,7 +108,7 @@ fn load_galaxy_structure() -> Result<Vec<(u32, Vec<u32>)>, Box<dyn std::error::E
         }
         Err(_) => {
             // Default galaxy structure
-            println!("⚠️  No galaxy.txt found, using default hexagonal galaxy");
+            println!("no galaxy.txt found, using default hexagonal galaxy");
             Ok(vec![
                 (1, vec![2, 3, 7]),
                 (2, vec![1, 4, 7]),
@@ -128,7 +128,7 @@ fn spawn_all_planets(
     orchestrator: &mut Orchestrator,
     galaxy: &[(u32, Vec<u32>)],
 ) -> Result<(), Box<dyn std::error::Error>> {
-    log::info!("Spawning {} planets...", galaxy.len());
+    log::info!("spawning {} planets...", galaxy.len());
 
     // Planet repository mapping
     let planet_repos = [
@@ -166,7 +166,7 @@ fn spawn_all_planets(
             orchestrator.state.add_adjacency(planet_id, neighbor);
         }
 
-        println!("  Planet {} - {} (neighbors: {:?})", planet_id, repo_name, neighbors);
+        println!("  planet {} - {} (neighbors: {:?})", planet_id, repo_name, neighbors);
     }
 
     Ok(())
@@ -182,7 +182,7 @@ fn spawn_planet_thread(
     let repo_name = repo_name.to_string();
 
     let handle = thread::spawn(move || {
-        log::info!("🌍 Planet {} ({}) thread started", planet_id, repo_name);
+        log::info!("planet {} ({}) thread started", planet_id, repo_name);
 
         // Create explorer channel
         let (_, rx_explorer) = unbounded::<common_game::protocols::planet_explorer::ExplorerToPlanet>();
@@ -225,7 +225,7 @@ fn spawn_planet_thread(
             }
         };
 
-        log::info!("🌍 Planet {} thread exiting", planet_id);
+        log::info!("planet {} thread exiting", planet_id);
     });
 
     Ok(handle)
@@ -645,11 +645,11 @@ fn interactive_console(monitor_tx: crossbeam_channel::Sender<MonitorCommand>) ->
             "stats" => {
                 let _ = monitor_tx.send(MonitorCommand::Stats);
             }
-            "pause" => {
+            "pause" | "p" => {
                 println!("⏸️  Simulation paused (command would be sent to orchestrator)");
                 // In real implementation: orchestrator.gui_command_sender().send(GuiCommand::PauseSimulation)
             }
-            "resume" => {
+            "resume" | "r"=> {
                 println!("▶️  Simulation resumed (command would be sent to orchestrator)");
                 // In real implementation: orchestrator.gui_command_sender().send(GuiCommand::ResumeSimulation)
             }
@@ -673,12 +673,12 @@ fn interactive_console(monitor_tx: crossbeam_channel::Sender<MonitorCommand>) ->
                     }
                 }
             }
-            "quit" | "exit" => {
+            "quit" | "exit" | "q" => {
                 println!("👋 Shutting down...");
                 let _ = monitor_tx.send(MonitorCommand::Exit);
                 break;
             }
-            "help" => {
+            "help" | "h"=> {
                 println!("Available commands:");
                 println!("  status           - Show current galaxy status");
                 println!("  stats            - Show game statistics");
