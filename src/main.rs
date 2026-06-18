@@ -190,27 +190,37 @@ fn spawn_planet_thread(
         match repo_name.as_str() {
             "orbitron" => {
                 log::info!("start orbitron");
-                dummy_planet_loop(planet_id, rx_orchestrator, tx_orchestrator);
+                let mut planet= orbitron::create_planet(rx_orchestrator, tx_orchestrator, rx_explorer,planet_id);
+                let _ = planet.run();
             }
             "skycartel" => {
                 log::info!("start skycartel");
-                dummy_planet_loop(planet_id, rx_orchestrator, tx_orchestrator);
+                let mut planet= skycartel::create_planet(planet_id, rx_orchestrator, tx_orchestrator, rx_explorer);
+                let _ = planet.run();
             }
             "rustrelli" => {
                 log::info!("start rustrelli");
-                dummy_planet_loop(planet_id, rx_orchestrator, tx_orchestrator);
+                let mut planet = rustrelli::create_planet(planet_id, rx_orchestrator, tx_orchestrator, rx_explorer, rustrelli::ExplorerRequestLimit::None);
+                let _ = planet.run();
             }
             "the_compiler_strikes_back" => {
                 log::info!("start the_compiler_strikes_back");
-                dummy_planet_loop(planet_id, rx_orchestrator, tx_orchestrator); //first planet
+                dummy_planet_loop(planet_id, rx_orchestrator, tx_orchestrator);
+                //fun doesnt work
+                //let mut planet= the_compiler_strikes_back::create_planet(planet_id, tx_orchestrator, rx_orchestrator, rx_explorer);
+                //let _ = planet.run();//first planet
             }
            "crabtorio" => {
                log::info!("start crabtorio");
-               dummy_planet_loop(planet_id, rx_orchestrator, tx_orchestrator); //first planet
+               let mut planet= crabtorio::create_planet(planet_id, rx_orchestrator, tx_orchestrator, rx_explorer);
+               let _ = planet.run();
            }
             "houston" => {
                 log::info!("start houston");
-                dummy_planet_loop(planet_id, rx_orchestrator, tx_orchestrator); //first planet
+                // not work
+                //let mut planet= houston::create_planet(planet_id, rx_orchestrator, tx_orchestrator, rx_explorer);
+                //let _ = planet.run();
+                dummy_planet_loop(planet_id, rx_orchestrator, tx_orchestrator);
 
 
             }

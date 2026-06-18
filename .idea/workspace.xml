@@ -14,7 +14,10 @@
     </cargoProject>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="668d04bc-8fc4-424c-8f8d-c6c91eedaeb2" name="Changes" comment="initializing enterprise planet thread" />
+    <list default="true" id="668d04bc-8fc4-424c-8f8d-c6c91eedaeb2" name="Changes" comment="single letter commands">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/main.rs" afterDir="false" />
+    </list>
     <list id="c3b1074b-0d0e-4959-a2fd-cc356ffda3f6" name="Changes by hp" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -254,6 +257,7 @@
       <workItem from="1781764443741" duration="1428000" />
       <workItem from="1781801526938" duration="150000" />
       <workItem from="1781804497278" duration="3441000" />
+      <workItem from="1781807999082" duration="2303000" />
     </task>
     <task id="LOCAL-00001" summary="test">
       <option name="closed" value="true" />
@@ -423,7 +427,15 @@
       <option name="project" value="LOCAL" />
       <updated>1781807799130</updated>
     </task>
-    <option name="localTasksCounter" value="22" />
+    <task id="LOCAL-00022" summary="single letter commands">
+      <option name="closed" value="true" />
+      <created>1781808780041</created>
+      <option name="number" value="00022" />
+      <option name="presentableId" value="LOCAL-00022" />
+      <option name="project" value="LOCAL" />
+      <updated>1781808780041</updated>
+    </task>
+    <option name="localTasksCounter" value="23" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -461,7 +473,8 @@
     <MESSAGE value="implemented skeleton of planet repo matching" />
     <MESSAGE value="fixing of match case (planet name)" />
     <MESSAGE value="initializing enterprise planet thread" />
-    <option name="LAST_COMMIT_MESSAGE" value="initializing enterprise planet thread" />
+    <MESSAGE value="single letter commands" />
+    <option name="LAST_COMMIT_MESSAGE" value="single letter commands" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />
