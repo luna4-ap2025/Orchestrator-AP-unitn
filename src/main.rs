@@ -183,33 +183,33 @@ fn spawn_planet_thread(
 
         // Create explorer channel
         let (_, rx_explorer) = unbounded::<common_game::protocols::planet_explorer::ExplorerToPlanet>();
-        match repo_name {
-            orbitron => {
+        match repo_name.as_str() {
+            "orbitron" => {
                 log::info!("start orbitron");
                 dummy_planet_loop(planet_id, rx_orchestrator, tx_orchestrator); //first planet
             }
-            skycartel => {
+            "skycartel" => {
                 log::info!("start skycartel");
                 dummy_planet_loop(planet_id, rx_orchestrator, tx_orchestrator); //first planet
             }
-            rustrelli=> {
+            "rustrelli" => {
                 log::info!("start rustrelli");
                 dummy_planet_loop(planet_id, rx_orchestrator, tx_orchestrator);
             }
-            the_compiler_strikes_back => {
+            "the_compiler_strikes_back" => {
                 log::info!("start the_compiler_strikes_back");
                 dummy_planet_loop(planet_id, rx_orchestrator, tx_orchestrator); //first planet
             }
-           crabtorio=> {
+           "crabtorio" => {
                log::info!("start crabtorio");
                dummy_planet_loop(planet_id, rx_orchestrator, tx_orchestrator); //first planet
            }
-            houston=> {
+            "houston" => {
                 log::info!("start houston");
                 dummy_planet_loop(planet_id, rx_orchestrator, tx_orchestrator); //first planet
 
             }
-            enterprise => {
+            "enterprise" => {
                 log::info!("start enterprise");
                 dummy_planet_loop(planet_id, rx_orchestrator, tx_orchestrator); //first planet
             }

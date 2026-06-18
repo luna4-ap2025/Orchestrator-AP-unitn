@@ -14,9 +14,8 @@
     </cargoProject>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="668d04bc-8fc4-424c-8f8d-c6c91eedaeb2" name="Changes" comment="Organized Cargo.toml and Added GUI Optional Dependencies">
+    <list default="true" id="668d04bc-8fc4-424c-8f8d-c6c91eedaeb2" name="Changes" comment="implemented skeleton of planet repo matching">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/main.rs" afterDir="false" />
     </list>
     <list id="c3b1074b-0d0e-4959-a2fd-cc356ffda3f6" name="Changes by hp" comment="" />
     <option name="SHOW_DIALOG" value="false" />
@@ -64,61 +63,61 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Cargo.Build `Test test::tests::test_asteroid_hits_planet`.executor": "Run",
-    "Cargo.Doctest of logging::init (line 16).executor": "Run",
-    "Cargo.Run orchestrator.executor": "Run",
-    "Cargo.Test test::tests::test_add_explorer_to_nonexistent_planet.executor": "Run",
-    "Cargo.Test test::tests::test_add_explorer_to_planet.executor": "Run",
-    "Cargo.Test test::tests::test_add_seven_planets.executor": "Run",
-    "Cargo.Test test::tests::test_asteroid_destroys_planet_without_rocket.executor": "Run",
-    "Cargo.Test test::tests::test_asteroid_hits_planet.executor": "Run",
-    "Cargo.Test test::tests::test_explorer_movement_between_planets.executor": "Run",
-    "Cargo.Test test::tests::test_orchestrator_initialization.executor": "Run",
-    "Cargo.Test test::tests::test_orchestrator_run.executor": "Run",
-    "Cargo.Test test::tests::test_planet_destruction_removes_explorers.executor": "Run",
-    "Cargo.Test test::tests::test_planet_destruction_removes_explorers_simple.executor": "Run",
-    "Cargo.Test test::tests::test_send_asteroid_and_sunray.executor": "Run",
-    "ModuleVcsDetector.initialDetectionPerformed": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "RunOnceActivity.rust.reset.selective.auto.import": "true",
-    "RunOnceActivity.typescript.service.memoryLimit.init": "true",
-    "codeWithMe.voiceChat.enabledByDefault": "false",
-    "com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultAutoModeForALLUsers.v1": "true",
-    "com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1": "true",
-    "git-widget-placeholder": "main",
-    "ignore.virus.scanning.warn.message": "true",
-    "junie.onboarding.icon.badge.shown": "true",
-    "last_opened_file_path": "D:/S2k in your area/pelatone/Orchestrator",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "org.rust.cargo.project.model.PROJECT_DISCOVERY": "true",
-    "org.rust.cargo.project.model.impl.CargoExternalSystemProjectAware.subscribe.first.balloon": "",
-    "org.rust.disableDetachedFileInspection/home/tattoo/Desktop/Orchestrator/src/orchestrator/tests/orchestrator_tests.rs": "true",
-    "org.rust.disableDetachedFileInspectionD:/S2k in your area/pelatone/Orchestrator/src/orchestrator/examples/bevy_gui.rs": "true",
-    "org.rust.disableDetachedFileInspectionD:/S2k in your area/pelatone/Orchestrator/src/orchestrator/explorer_control.rs": "true",
-    "org.rust.disableDetachedFileInspectionD:/S2k in your area/pelatone/Orchestrator/src/orchestrator/lib.rs": "true",
-    "org.rust.disableDetachedFileInspectionD:/S2k in your area/pelatone/Orchestrator/src/orchestrator/orchestrator.rs": "true",
-    "org.rust.disableDetachedFileInspectionD:/S2k in your area/pelatone/Orchestrator/src/orchestrator/planet_control.rs": "true",
-    "org.rust.disableDetachedFileInspectionD:/S2k in your area/pelatone/Orchestrator/src/orchestrator/routing.rs": "true",
-    "org.rust.disableDetachedFileInspectionD:/S2k in your area/pelatone/Orchestrator/src/orchestrator/state.rs": "true",
-    "settings.editor.selected.configurable": "editor.preferences.tabs",
-    "to.speed.mode.migration.done": "true",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Cargo.Build `Test test::tests::test_asteroid_hits_planet`.executor&quot;: &quot;Run&quot;,
+    &quot;Cargo.Doctest of logging::init (line 16).executor&quot;: &quot;Run&quot;,
+    &quot;Cargo.Run orchestrator.executor&quot;: &quot;Run&quot;,
+    &quot;Cargo.Test test::tests::test_add_explorer_to_nonexistent_planet.executor&quot;: &quot;Run&quot;,
+    &quot;Cargo.Test test::tests::test_add_explorer_to_planet.executor&quot;: &quot;Run&quot;,
+    &quot;Cargo.Test test::tests::test_add_seven_planets.executor&quot;: &quot;Run&quot;,
+    &quot;Cargo.Test test::tests::test_asteroid_destroys_planet_without_rocket.executor&quot;: &quot;Run&quot;,
+    &quot;Cargo.Test test::tests::test_asteroid_hits_planet.executor&quot;: &quot;Run&quot;,
+    &quot;Cargo.Test test::tests::test_explorer_movement_between_planets.executor&quot;: &quot;Run&quot;,
+    &quot;Cargo.Test test::tests::test_orchestrator_initialization.executor&quot;: &quot;Run&quot;,
+    &quot;Cargo.Test test::tests::test_orchestrator_run.executor&quot;: &quot;Run&quot;,
+    &quot;Cargo.Test test::tests::test_planet_destruction_removes_explorers.executor&quot;: &quot;Run&quot;,
+    &quot;Cargo.Test test::tests::test_planet_destruction_removes_explorers_simple.executor&quot;: &quot;Run&quot;,
+    &quot;Cargo.Test test::tests::test_send_asteroid_and_sunray.executor&quot;: &quot;Run&quot;,
+    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.rust.reset.selective.auto.import&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.typescript.service.memoryLimit.init&quot;: &quot;true&quot;,
+    &quot;codeWithMe.voiceChat.enabledByDefault&quot;: &quot;false&quot;,
+    &quot;com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultAutoModeForALLUsers.v1&quot;: &quot;true&quot;,
+    &quot;com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
+    &quot;junie.onboarding.icon.badge.shown&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;D:/S2k in your area/pelatone/Orchestrator&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;org.rust.cargo.project.model.PROJECT_DISCOVERY&quot;: &quot;true&quot;,
+    &quot;org.rust.cargo.project.model.impl.CargoExternalSystemProjectAware.subscribe.first.balloon&quot;: &quot;&quot;,
+    &quot;org.rust.disableDetachedFileInspection/home/tattoo/Desktop/Orchestrator/src/orchestrator/tests/orchestrator_tests.rs&quot;: &quot;true&quot;,
+    &quot;org.rust.disableDetachedFileInspectionD:/S2k in your area/pelatone/Orchestrator/src/orchestrator/examples/bevy_gui.rs&quot;: &quot;true&quot;,
+    &quot;org.rust.disableDetachedFileInspectionD:/S2k in your area/pelatone/Orchestrator/src/orchestrator/explorer_control.rs&quot;: &quot;true&quot;,
+    &quot;org.rust.disableDetachedFileInspectionD:/S2k in your area/pelatone/Orchestrator/src/orchestrator/lib.rs&quot;: &quot;true&quot;,
+    &quot;org.rust.disableDetachedFileInspectionD:/S2k in your area/pelatone/Orchestrator/src/orchestrator/orchestrator.rs&quot;: &quot;true&quot;,
+    &quot;org.rust.disableDetachedFileInspectionD:/S2k in your area/pelatone/Orchestrator/src/orchestrator/planet_control.rs&quot;: &quot;true&quot;,
+    &quot;org.rust.disableDetachedFileInspectionD:/S2k in your area/pelatone/Orchestrator/src/orchestrator/routing.rs&quot;: &quot;true&quot;,
+    &quot;org.rust.disableDetachedFileInspectionD:/S2k in your area/pelatone/Orchestrator/src/orchestrator/state.rs&quot;: &quot;true&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;editor.preferences.tabs&quot;,
+    &quot;to.speed.mode.migration.done&quot;: &quot;true&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   },
-  "keyToStringList": {
-    "ChangesTree.GroupingKeys": [
-      "directory",
-      "repository"
+  &quot;keyToStringList&quot;: {
+    &quot;ChangesTree.GroupingKeys&quot;: [
+      &quot;directory&quot;,
+      &quot;repository&quot;
     ]
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Users\hp\RustProjects\Orchestrator\src\bin" />
@@ -253,7 +252,7 @@
       <workItem from="1770216072977" duration="16979000" />
       <workItem from="1781716907852" duration="602000" />
       <workItem from="1781717567717" duration="1059000" />
-      <workItem from="1781719015970" duration="3873000" />
+      <workItem from="1781719015970" duration="5250000" />
     </task>
     <task id="LOCAL-00001" summary="test">
       <option name="closed" value="true" />
@@ -391,7 +390,23 @@
       <option name="project" value="LOCAL" />
       <updated>1770196527580</updated>
     </task>
-    <option name="localTasksCounter" value="18" />
+    <task id="LOCAL-00018" summary="preparing for addition of other planets">
+      <option name="closed" value="true" />
+      <created>1781724403860</created>
+      <option name="number" value="00018" />
+      <option name="presentableId" value="LOCAL-00018" />
+      <option name="project" value="LOCAL" />
+      <updated>1781724403860</updated>
+    </task>
+    <task id="LOCAL-00019" summary="implemented skeleton of planet repo matching">
+      <option name="closed" value="true" />
+      <created>1781725656966</created>
+      <option name="number" value="00019" />
+      <option name="presentableId" value="LOCAL-00019" />
+      <option name="project" value="LOCAL" />
+      <updated>1781725656966</updated>
+    </task>
+    <option name="localTasksCounter" value="20" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -425,7 +440,9 @@
     <MESSAGE value="finally is a binary" />
     <MESSAGE value="added planets and explorer dependencies" />
     <MESSAGE value="Organized Cargo.toml and Added GUI Optional Dependencies" />
-    <option name="LAST_COMMIT_MESSAGE" value="Organized Cargo.toml and Added GUI Optional Dependencies" />
+    <MESSAGE value="preparing for addition of other planets" />
+    <MESSAGE value="implemented skeleton of planet repo matching" />
+    <option name="LAST_COMMIT_MESSAGE" value="implemented skeleton of planet repo matching" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />
