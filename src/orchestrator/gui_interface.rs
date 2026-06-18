@@ -185,8 +185,10 @@ impl GuiState {
         }
     }
 
+    // What is the purpose of this?
     /// Gets the current mood emoji based on recent events.
-    #[must_use]
+    //#[must_use]
+    //????
     pub fn get_current_mood(&self) -> &'static str {
         if self.game_stats.asteroids_sent > 0 && self.game_stats.sunrays_sent == 0 {
             "😠"
@@ -198,4 +200,6 @@ impl GuiState {
             "😐"
         }
     }
+    
+    
 }

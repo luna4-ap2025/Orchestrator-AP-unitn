@@ -14,9 +14,10 @@
     </cargoProject>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="668d04bc-8fc4-424c-8f8d-c6c91eedaeb2" name="Changes" comment="single letter commands">
+    <list default="true" id="668d04bc-8fc4-424c-8f8d-c6c91eedaeb2" name="Changes" comment="2 not working planets rest working">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/main.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/orchestrator/gui_interface.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/orchestrator/gui_interface.rs" afterDir="false" />
     </list>
     <list id="c3b1074b-0d0e-4959-a2fd-cc356ffda3f6" name="Changes by hp" comment="" />
     <option name="SHOW_DIALOG" value="false" />
@@ -257,7 +258,8 @@
       <workItem from="1781764443741" duration="1428000" />
       <workItem from="1781801526938" duration="150000" />
       <workItem from="1781804497278" duration="3441000" />
-      <workItem from="1781807999082" duration="2303000" />
+      <workItem from="1781807999082" duration="2473000" />
+      <workItem from="1781810532512" duration="1263000" />
     </task>
     <task id="LOCAL-00001" summary="test">
       <option name="closed" value="true" />
@@ -435,7 +437,15 @@
       <option name="project" value="LOCAL" />
       <updated>1781808780041</updated>
     </task>
-    <option name="localTasksCounter" value="23" />
+    <task id="LOCAL-00023" summary="2 not working planets rest working">
+      <option name="closed" value="true" />
+      <created>1781810421417</created>
+      <option name="number" value="00023" />
+      <option name="presentableId" value="LOCAL-00023" />
+      <option name="project" value="LOCAL" />
+      <updated>1781810421417</updated>
+    </task>
+    <option name="localTasksCounter" value="24" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -474,7 +484,8 @@
     <MESSAGE value="fixing of match case (planet name)" />
     <MESSAGE value="initializing enterprise planet thread" />
     <MESSAGE value="single letter commands" />
-    <option name="LAST_COMMIT_MESSAGE" value="single letter commands" />
+    <MESSAGE value="2 not working planets rest working" />
+    <option name="LAST_COMMIT_MESSAGE" value="2 not working planets rest working" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

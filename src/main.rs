@@ -21,7 +21,7 @@ use houston::houston_we_have_a_borrow;
 use orchestrator::orchestrator::AIPhase;
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
-    println!("🌌 AP Rover Project - FULL GALAXY SIMULATION");
+    println!("AP Rover Project - FULL GALAXY SIMULATION");
     println!("==============================================");
     println!("Starting with:");
     println!("• 7 Planets from different repositories");
@@ -33,7 +33,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     // Initialize logging
     logging::init(LevelFilter::Info);
 
-    log::info!("🚀 Initializing full galaxy simulation...");
+    log::info!("Initializing full galaxy simulation...");
 
     // Create orchestrator
     let mut orchestrator = Orchestrator::new()?;
@@ -71,8 +71,8 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     // Shutdown
     println!("\n exiting galaxy_simulation");
     orchestrator_handle.join()
-        .map_err(|_| "Failed to join orchestrator thread")?
-        .map_err(|e| format!("Orchestrator error: {}", e))?;
+        .map_err(|_| "failed to join orchestrator thread")?
+        .map_err(|e| format!("orchestrator error: {}", e))?;
 
     println!("simulation completed successfully!");
     Ok(())
@@ -189,34 +189,34 @@ fn spawn_planet_thread(
         //planet logic
         match repo_name.as_str() {
             "orbitron" => {
-                log::info!("start orbitron");
+                log::info!("start orbitron loop");
                 let mut planet= orbitron::create_planet(rx_orchestrator, tx_orchestrator, rx_explorer,planet_id);
                 let _ = planet.run();
             }
             "skycartel" => {
-                log::info!("start skycartel");
+                log::info!("start skycartel loop");
                 let mut planet= skycartel::create_planet(planet_id, rx_orchestrator, tx_orchestrator, rx_explorer);
                 let _ = planet.run();
             }
             "rustrelli" => {
-                log::info!("start rustrelli");
+                log::info!("start rustrelli loop");
                 let mut planet = rustrelli::create_planet(planet_id, rx_orchestrator, tx_orchestrator, rx_explorer, rustrelli::ExplorerRequestLimit::None);
                 let _ = planet.run();
             }
             "the_compiler_strikes_back" => {
-                log::info!("start the_compiler_strikes_back");
+                log::info!("start the_compiler_strikes_back loop");
                 dummy_planet_loop(planet_id, rx_orchestrator, tx_orchestrator);
                 //fun doesnt work
                 //let mut planet= the_compiler_strikes_back::create_planet(planet_id, tx_orchestrator, rx_orchestrator, rx_explorer);
                 //let _ = planet.run();//first planet
             }
            "crabtorio" => {
-               log::info!("start crabtorio");
+               log::info!("start crabtorio loop");
                let mut planet= crabtorio::create_planet(planet_id, rx_orchestrator, tx_orchestrator, rx_explorer);
                let _ = planet.run();
            }
             "houston" => {
-                log::info!("start houston");
+                log::info!("start houston loop");
                 // not work
                 //let mut planet= houston::create_planet(planet_id, rx_orchestrator, tx_orchestrator, rx_explorer);
                 //let _ = planet.run();
@@ -225,17 +225,19 @@ fn spawn_planet_thread(
 
             }
             "enterprise" => {
-                log::info!("start enterprise");
+                log::info!("start enterprise loop");
                 let mut planet= enterprise::create_planet(planet_id, rx_orchestrator, tx_orchestrator, rx_explorer);
                 let _ = planet.run();
             }
             // in default use dummy implementation (can't access private fields in real structs)
             _ => {
+                log::info!("start dummy loop");
                 dummy_planet_loop(planet_id, rx_orchestrator, tx_orchestrator);
+
             }
         };
 
-        log::info!("planet {} thread exiting", planet_id);
+        log::info!("planet {} ({}) thread exit", planet_id, repo_name);
     });
 
     Ok(handle)
@@ -342,12 +344,12 @@ fn spawn_explorers(
     orchestrator: &mut Orchestrator,
     galaxy: &[(u32, Vec<u32>)],
 ) -> Result<(), Box<dyn std::error::Error>> {
-    log::info!("Spawning explorers...");
+    log::info!("spawn explorers...");
 
     // Explorer names and starting planets (2 explorers as specified)
     let explorers = [
-        (100, "Viviana", 1),
-        (101, "Marco", 3),
+        (100, "alice", 1),
+        (101, "bob", 3), //no capitalization because communism
     ];
 
     for (explorer_id, name, starting_planet) in explorers.iter() {
@@ -367,7 +369,7 @@ fn spawn_explorers(
         // Add to orchestrator
         orchestrator.add_explorer(*explorer_id, to_explorer_tx, from_explorer_rx, *starting_planet)?;
 
-        println!("  Explorer {} ({}) on planet {}", explorer_id, name, starting_planet);
+        println!("explorer {} ({}) on planet {}", explorer_id, name, starting_planet);
     }
 
     Ok(())
@@ -381,7 +383,7 @@ fn spawn_explorer_thread(
     tx_orchestrator: crossbeam_channel::Sender<common_game::protocols::orchestrator_explorer::ExplorerToOrchestrator<common_game::components::resource::GenericResource>>,
 ) -> Result<thread::JoinHandle<()>, Box<dyn std::error::Error>> {
     let handle = thread::spawn(move || {
-        log::info!("🧑‍🚀 Explorer {} ({}) thread started on planet {}", explorer_id, name, starting_planet);
+        log::info!("explorer {} ({}) thread started on planet {}", explorer_id, name, starting_planet);
 
         // Send initial location
         let _ = tx_orchestrator.send(
@@ -436,7 +438,7 @@ fn spawn_explorer_thread(
                 }
                 common_game::protocols::orchestrator_explorer::OrchestratorToExplorer::MoveToPlanet { planet_id, sender_to_new_planet } => {
                     if planet_id != current_planet && sender_to_new_planet.is_some() {
-                        log::info!("Explorer {} moving from planet {} to {}", explorer_id, current_planet, planet_id);
+                        log::info!("explorer {} moving from planet {} to {}", explorer_id, current_planet, planet_id);
                         current_planet = planet_id;
                     }
 
@@ -455,7 +457,7 @@ fn spawn_explorer_thread(
                     // Send a simple response indicating no resources
                     // We can't create GenericResource directly, so we'll indicate an error
                     // or use a workaround
-                    log::warn!("Explorer {} received BagContentRequest but cannot create resources in dummy mode", explorer_id);
+                    log::warn!("explorer {} received BagContentRequest but cannot create resources in dummy mode", explorer_id);
                 }
                 common_game::protocols::orchestrator_explorer::OrchestratorToExplorer::CurrentPlanetRequest => {
                     let _ = tx_orchestrator.send(
@@ -466,7 +468,7 @@ fn spawn_explorer_thread(
                     );
                 }
                 common_game::protocols::orchestrator_explorer::OrchestratorToExplorer::NeighborsResponse { neighbors } => {
-                    log::debug!("Explorer {} received neighbors: {:?}", explorer_id, neighbors);
+                    log::debug!("explorer {} received neighbors: {:?}", explorer_id, neighbors);
 
                     // Auto-travel to first neighbor after receiving neighbors
                     if let Some(&first_neighbor) = neighbors.first() {
@@ -483,12 +485,12 @@ fn spawn_explorer_thread(
                     }
                 }
                 _ => {
-                    log::debug!("Explorer {} received message: {:?}", explorer_id, msg);
+                    log::debug!("explorer {} received message: {:?}", explorer_id, msg);
                 }
             }
         }
 
-        log::info!("🧑‍🚀 Explorer {} thread exiting", explorer_id);
+        log::info!("explorer {} thread exiting", explorer_id);
     });
 
     Ok(handle)
@@ -505,7 +507,7 @@ fn create_monitoring_thread(orchestrator: &Orchestrator) -> crossbeam_channel::S
         let mut last_update = Instant::now();
         let update_interval = Duration::from_secs(2);
 
-        println!("\n📊 GALAXY MONITOR STARTED");
+        println!("\nGALAXY MONITOR STARTED");
         println!("=========================");
 
         // Initial status
@@ -539,14 +541,14 @@ fn create_monitoring_thread(orchestrator: &Orchestrator) -> crossbeam_channel::S
             thread::sleep(Duration::from_millis(100));
         }
 
-        println!("📊 Galaxy monitor shutting down...");
+        println!("Galaxy monitor shutting down...");
     });
 
     monitor_tx
 }
 
 fn print_status(state: &SystemState) {
-    println!("\n🌌 CURRENT GALAXY STATUS");
+    println!("\nCURRENT GALAXY STATUS");
     println!("=======================");
     println!("Game State: {:?}", state.game_state());
     println!("Active Planets: {}", state.get_alive_planets_sorted().len());
@@ -569,7 +571,7 @@ fn print_status(state: &SystemState) {
 
 fn print_statistics(state: &SystemState) {
     let stats = state.game_stats();
-    println!("\n📈 GAME STATISTICS");
+    println!("\nGAME STATISTICS");
     println!("==================");
     println!("Asteroids Sent: {}", stats.asteroids_sent);
     println!("Sunrays Sent: {}", stats.sunrays_sent);
@@ -588,13 +590,13 @@ fn print_statistics(state: &SystemState) {
 }
 
 fn print_live_status(state: &GuiState) {
-    println!("\n📡 LIVE UPDATE - {}", chrono::Local::now().format("%H:%M:%S"));
-    println!("Galaxy Mood: {}", state.get_current_mood());
-    println!("Planets: {}, Explorers: {}", state.planets.len(), state.explorers.len());
+    println!("\nLIVE UPDATE - {}", chrono::Local::now().format("%H:%M:%S"));
+    //println!("galaxy phase: {}", state.get_current_phase()); to do
+    println!("planets: {}, explorers: {}", state.planets.len(), state.explorers.len());
 
     // Show any explorers that recently moved
     for explorer in &state.explorers {
-        println!("  Explorer {} on Planet {}", explorer.id, explorer.current_planet);
+        println!("  explorer {} on planet {}", explorer.id, explorer.current_planet);
     }
 }
 
@@ -602,7 +604,7 @@ fn print_live_status(state: &GuiState) {
 
 fn start_orchestrator_thread(mut orchestrator: Orchestrator) -> Result<thread::JoinHandle<Result<(), String>>, Box<dyn std::error::Error>> {
     let handle = thread::spawn(move || {
-        log::info!("Orchestrator main thread starting...");
+        log::info!("orchestrator main thread starting...");
 
         // Send start commands to all planets and explorers after a brief delay
         thread::sleep(Duration::from_secs(1));
@@ -631,7 +633,7 @@ fn start_orchestrator_thread(mut orchestrator: Orchestrator) -> Result<thread::J
 // ==================== INTERACTIVE CONSOLE ====================
 
 fn interactive_console(monitor_tx: crossbeam_channel::Sender<MonitorCommand>) -> Result<(), Box<dyn std::error::Error>> {
-    println!("\n🎮 INTERACTIVE CONSOLE");
+    println!("\nINTERACTIVE CONSOLE");
     println!("Type commands to control the simulation");
     println!("Commands: status, stats, send_asteroid [planet], send_sunray [planet], pause, resume, quit");
     println!("Example: send_asteroid 3");
@@ -656,11 +658,11 @@ fn interactive_console(monitor_tx: crossbeam_channel::Sender<MonitorCommand>) ->
                 let _ = monitor_tx.send(MonitorCommand::Stats);
             }
             "pause" | "p" => {
-                println!("⏸️  Simulation paused (command would be sent to orchestrator)");
+                println!("simulation paused (command would be sent to orchestrator)");
                 // In real implementation: orchestrator.gui_command_sender().send(GuiCommand::PauseSimulation)
             }
             "resume" | "r"=> {
-                println!("▶️  Simulation resumed (command would be sent to orchestrator)");
+                println!("simulation resumed (command would be sent to orchestrator)");
                 // In real implementation: orchestrator.gui_command_sender().send(GuiCommand::ResumeSimulation)
             }
             cmd if cmd.starts_with("send_asteroid ") => {
@@ -669,22 +671,22 @@ fn interactive_console(monitor_tx: crossbeam_channel::Sender<MonitorCommand>) ->
                         println!("☄️  Command to send asteroid to planet {} (would be sent to orchestrator)", planet_id);
                         // In real implementation: orchestrator.send_asteroid_to_planet(planet_id)
                     } else {
-                        println!("❌ Invalid planet ID");
+                        println!("invalid planet ID");
                     }
                 }
             }
             cmd if cmd.starts_with("send_sunray ") => {
                 if let Some(planet_str) = cmd.strip_prefix("send_sunray ") {
                     if let Ok(planet_id) = planet_str.parse::<u32>() {
-                        println!("☀️  Command to send sunray to planet {} (would be sent to orchestrator)", planet_id);
+                        println!("command to send sunray to planet {} (would be sent to orchestrator)", planet_id);
                         // In real implementation: orchestrator.send_sunray_to_planet(planet_id)
                     } else {
-                        println!("❌ Invalid planet ID");
+                        println!("invalid planet ID");
                     }
                 }
             }
             "quit" | "exit" | "q" => {
-                println!("👋 Shutting down...");
+                println!("shutting down...");
                 let _ = monitor_tx.send(MonitorCommand::Exit);
                 break;
             }
@@ -700,7 +702,7 @@ fn interactive_console(monitor_tx: crossbeam_channel::Sender<MonitorCommand>) ->
             }
             "" => continue,
             _ => {
-                println!("❌ Unknown command. Type 'help' for available commands.");
+                println!("unknown command. Type 'help' for available commands.");
             }
         }
     }
