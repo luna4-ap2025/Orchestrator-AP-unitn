@@ -14,8 +14,9 @@
     </cargoProject>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="668d04bc-8fc4-424c-8f8d-c6c91eedaeb2" name="Changes" comment="implemented skeleton of planet repo matching">
+    <list default="true" id="668d04bc-8fc4-424c-8f8d-c6c91eedaeb2" name="Changes" comment="fixing of match case (planet name)">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/main.rs" afterDir="false" />
     </list>
     <list id="c3b1074b-0d0e-4959-a2fd-cc356ffda3f6" name="Changes by hp" comment="" />
     <option name="SHOW_DIALOG" value="false" />
@@ -253,6 +254,9 @@
       <workItem from="1781716907852" duration="602000" />
       <workItem from="1781717567717" duration="1059000" />
       <workItem from="1781719015970" duration="5250000" />
+      <workItem from="1781764443741" duration="1428000" />
+      <workItem from="1781801526938" duration="150000" />
+      <workItem from="1781804497278" duration="3271000" />
     </task>
     <task id="LOCAL-00001" summary="test">
       <option name="closed" value="true" />
@@ -406,7 +410,15 @@
       <option name="project" value="LOCAL" />
       <updated>1781725656966</updated>
     </task>
-    <option name="localTasksCounter" value="20" />
+    <task id="LOCAL-00020" summary="fixing of match case (planet name)">
+      <option name="closed" value="true" />
+      <created>1781764854741</created>
+      <option name="number" value="00020" />
+      <option name="presentableId" value="LOCAL-00020" />
+      <option name="project" value="LOCAL" />
+      <updated>1781764854741</updated>
+    </task>
+    <option name="localTasksCounter" value="21" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -442,7 +454,8 @@
     <MESSAGE value="Organized Cargo.toml and Added GUI Optional Dependencies" />
     <MESSAGE value="preparing for addition of other planets" />
     <MESSAGE value="implemented skeleton of planet repo matching" />
-    <option name="LAST_COMMIT_MESSAGE" value="implemented skeleton of planet repo matching" />
+    <MESSAGE value="fixing of match case (planet name)" />
+    <option name="LAST_COMMIT_MESSAGE" value="fixing of match case (planet name)" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

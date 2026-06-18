@@ -16,6 +16,8 @@ use std::sync::Arc;
 use std::time::{Duration, Instant};
 use std::thread;
 use std::io::{self, Write};
+use std::process::exit;
+use houston::houston_we_have_a_borrow;
 use orchestrator::orchestrator::AIPhase;
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
@@ -132,11 +134,12 @@ fn spawn_all_planets(
     let planet_repos = [
         ("orbitron", "Advanced-Programming-2025-Orbitron/Orbitron"),
         ("skycartel", "0TH08/Skycartel"),
+        ("enterprise", "Thompspsps/Enterprise_planet"),
         ("rustrelli", "Rustrelli/rustrelli"),
         ("the_compiler_strikes_back", "TheCompilerStrikesBackAP2025/TheCompilerStrikesBack"),
         ("crabtorio", "crabtorio/crabtorio"),
         ("houston", "Houston-we-have-a-borrow/Planet"),
-        ("enterprise", "Thompspsps/Enterprise_planet"),
+
     ];
 
     for (i, &(planet_id, ref neighbors)) in galaxy.iter().enumerate() {
@@ -183,14 +186,15 @@ fn spawn_planet_thread(
 
         // Create explorer channel
         let (_, rx_explorer) = unbounded::<common_game::protocols::planet_explorer::ExplorerToPlanet>();
+        //planet logic
         match repo_name.as_str() {
             "orbitron" => {
                 log::info!("start orbitron");
-                dummy_planet_loop(planet_id, rx_orchestrator, tx_orchestrator); //first planet
+                dummy_planet_loop(planet_id, rx_orchestrator, tx_orchestrator);
             }
             "skycartel" => {
                 log::info!("start skycartel");
-                dummy_planet_loop(planet_id, rx_orchestrator, tx_orchestrator); //first planet
+                dummy_planet_loop(planet_id, rx_orchestrator, tx_orchestrator);
             }
             "rustrelli" => {
                 log::info!("start rustrelli");
@@ -208,10 +212,12 @@ fn spawn_planet_thread(
                 log::info!("start houston");
                 dummy_planet_loop(planet_id, rx_orchestrator, tx_orchestrator); //first planet
 
+
             }
             "enterprise" => {
                 log::info!("start enterprise");
-                dummy_planet_loop(planet_id, rx_orchestrator, tx_orchestrator); //first planet
+                let mut planet= enterprise::create_planet(planet_id, rx_orchestrator, tx_orchestrator, rx_explorer);
+                let _ = planet.run();
             }
             // in default use dummy implementation (can't access private fields in real structs)
             _ => {
