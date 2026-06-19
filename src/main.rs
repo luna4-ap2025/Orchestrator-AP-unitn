@@ -668,7 +668,7 @@ fn interactive_console(monitor_tx: crossbeam_channel::Sender<MonitorCommand>) ->
             cmd if cmd.starts_with("send_asteroid ") => {
                 if let Some(planet_str) = cmd.strip_prefix("send_asteroid ") {
                     if let Ok(planet_id) = planet_str.parse::<u32>() {
-                        println!("☄️  Command to send asteroid to planet {} (would be sent to orchestrator)", planet_id);
+                        println!("Command to send asteroid to planet {} (would be sent to orchestrator)", planet_id);
                         // In real implementation: orchestrator.send_asteroid_to_planet(planet_id)
                     } else {
                         println!("invalid planet ID");
@@ -688,6 +688,7 @@ fn interactive_console(monitor_tx: crossbeam_channel::Sender<MonitorCommand>) ->
             "quit" | "exit" | "q" => {
                 println!("shutting down...");
                 let _ = monitor_tx.send(MonitorCommand::Exit);
+                std::process::exit(0);
                 break;
             }
             "help" | "h"=> {

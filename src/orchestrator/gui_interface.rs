@@ -200,6 +200,4 @@ impl GuiState {
             "😐"
         }
     }
-    
-    
 }
