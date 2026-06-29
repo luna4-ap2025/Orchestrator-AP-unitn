@@ -73,12 +73,13 @@ impl GalaxyAI {
 
     /// Set the current phase with a random length and active phase change
     fn change_phase_random(&mut self) {
-        for _ in 0..1000 {
+        for _ in 0..10 { //repeat a reasonable number of times to ensure next phase is different
             let new_phase = Self::random_phase();
             if new_phase != self.phase {
                 self.phase = new_phase;
                 self.current_phase_length = Self::random_phase_length();
                 self.phase_change = true;
+                log::info!("Galaxy phase changed to {:?} for {} cycles", self.phase, self.current_phase_length + 1);
                 break;
             }
         }
@@ -106,10 +107,10 @@ impl GalaxyAI {
         self.current_intention = intention;
     }
 
-    /// Generate a phase length between 100 and 1000 cycles
+    /// Generate a phase length between 5 and 10
     fn random_phase_length() -> u32 {
         let mut rng = rand::thread_rng();
-        rng.gen_range(100..=1000)
+        rng.gen_range(5..=10) //cycle lengths for which galaxy will maintain a phase
     }
 
     /// Selects an optional random planet ID from the given list
