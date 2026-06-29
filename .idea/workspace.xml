@@ -17,7 +17,8 @@
     <list default="true" id="668d04bc-8fc4-424c-8f8d-c6c91eedaeb2" name="Changes" comment="improved logging. what is &quot;galaxy mood&quot;">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/main.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/orchestrator/gui_interface.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/orchestrator/gui_interface.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/orchestrator/galaxy_ai.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/orchestrator/galaxy_ai.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/orchestrator/orchestrator.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/orchestrator/orchestrator.rs" afterDir="false" />
     </list>
     <list id="c3b1074b-0d0e-4959-a2fd-cc356ffda3f6" name="Changes by hp" comment="" />
     <option name="SHOW_DIALOG" value="false" />
@@ -42,12 +43,12 @@
     &quot;assignee&quot;: &quot;vivis2kuni&quot;
   }
 }</component>
-  <component name="GithubPullRequestsUISettings">{
-  &quot;selectedUrlAndAccountId&quot;: {
-    &quot;url&quot;: &quot;https://github.com/luna4-ap2025/Orchestrator-AP-unitn.git&quot;,
-    &quot;accountId&quot;: &quot;eae540d1-2bb3-4b5e-813f-5cc3e4328500&quot;
+  <component name="GithubPullRequestsUISettings"><![CDATA[{
+  "selectedUrlAndAccountId": {
+    "url": "https://github.com/luna4-ap2025/Orchestrator-AP-unitn.git",
+    "accountId": "a3c02860-dc5b-48b5-82df-52096d3065f9"
   }
-}</component>
+}]]></component>
   <component name="MacroExpansionManager">
     <option name="directoryName" value="qDRWO4rp" />
   </component>
