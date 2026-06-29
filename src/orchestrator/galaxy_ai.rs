@@ -179,6 +179,16 @@ impl GalaxyAI {
         self.phase
     }
 
+    pub fn get_phase_as_str(&self) -> &str {
+        match self.phase {
+            AIPhase::Dormant => "Dormant",
+            AIPhase::Prosperous => "Prosperous",
+            AIPhase::Destructive => "Destructive",
+            AIPhase::Chaotic => "Chaotic",
+            AIPhase::Calm => "Calm",
+        }
+    }
+
     pub fn get_intention(&self) -> GalaxyAction {
         self.current_intention.clone()
     }

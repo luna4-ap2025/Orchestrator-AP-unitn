@@ -258,6 +258,10 @@ impl Orchestrator {
     fn run_galaxy_ai(&mut self) {
         let alive_planets = self.state.get_alive_planets_sorted();
         self.galaxy_ai.update(&alive_planets);
+        if self.galaxy_ai.get_phase_change() == true {
+            log::info!("Galaxy phase is {}", self.galaxy_ai.get_phase_as_str());
+        };
+
 
         match self.galaxy_ai.get_intention() {
             GalaxyAction::SendAsteroid { target_planet } => {

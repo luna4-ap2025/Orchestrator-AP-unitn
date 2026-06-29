@@ -54,7 +54,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     orchestrator.enable_galaxy_ai();
     orchestrator.set_galaxy_ai_parameters(
         AIPhase::Prosperous,
-        200000, // Phase length
+        200, // Phase length
         true, // Auto-change phases
     );
     println!("galaxy AI enabled with prosperous phase");
@@ -206,7 +206,7 @@ fn spawn_planet_thread(
             "the_compiler_strikes_back" => {
                 log::info!("start the_compiler_strikes_back loop");
                 dummy_planet_loop(planet_id, rx_orchestrator, tx_orchestrator);
-                //fun doesnt work
+                //won't start
                 //let mut planet= the_compiler_strikes_back::create_planet(planet_id, tx_orchestrator, rx_orchestrator, rx_explorer);
                 //let _ = planet.run();//first planet
             }
@@ -217,7 +217,7 @@ fn spawn_planet_thread(
            }
             "houston" => {
                 log::info!("start houston loop");
-                // not work
+                //won't start
                 //let mut planet= houston::create_planet(planet_id, rx_orchestrator, tx_orchestrator, rx_explorer);
                 //let _ = planet.run();
                 dummy_planet_loop(planet_id, rx_orchestrator, tx_orchestrator);
