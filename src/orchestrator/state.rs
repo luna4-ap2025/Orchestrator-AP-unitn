@@ -145,7 +145,7 @@ impl SystemState {
     }
 
     #[must_use]
-    fn new_galaxy_from_file(structure_file: String) -> GalaxyStructure {
+    pub fn new_galaxy_from_file(structure_file: String) -> GalaxyStructure {
         match Self::read_lines_to_vec(structure_file) {
             Ok(lines) => GalaxyStructure::new_from_file(lines.as_slice()),
             Err(_) => {
@@ -331,6 +331,11 @@ impl SystemState {
         } else {
             log::warn!("Cannot connect {} and {}: one or both planets dead", planet_a, planet_b);
         }
+    }
+
+    pub fn add_adjacency_unchecked(&mut self, planet_a: ID, planet_b: ID) {
+        self.galaxy_structure.add_connection_unchecked(planet_a, planet_b);
+        log::info!("Added unchecked adjacency between {} and {}", planet_a, planet_b);
     }
 
     #[must_use]

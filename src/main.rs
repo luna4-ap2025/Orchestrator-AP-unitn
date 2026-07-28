@@ -163,7 +163,7 @@ fn spawn_all_planets(
 
         // Add adjacency to state
         for &neighbor in neighbors {
-            orchestrator.state.add_adjacency(planet_id, neighbor);
+            orchestrator.state.add_adjacency_unchecked(planet_id, neighbor);
         }
 
         println!("  planet {} - {} (neighbors: {:?})", planet_id, repo_name, neighbors);
@@ -204,7 +204,7 @@ fn spawn_planet_thread(
                 let _ = planet.run();
             }
             "the_compiler_strikes_back" => {
-                log::info!("start the_compiler_strikes_back loop");
+                log::info!("start the_compiler_strikes_back loop [dummy]");
                 dummy_planet_loop(planet_id, rx_orchestrator, tx_orchestrator);
                 //won't start
                 //let mut planet= the_compiler_strikes_back::create_planet(planet_id, tx_orchestrator, rx_orchestrator, rx_explorer);
@@ -216,7 +216,7 @@ fn spawn_planet_thread(
                let _ = planet.run();
            }
             "houston" => {
-                log::info!("start houston loop");
+                log::info!("start houston loop [dummy]");
                 //won't start
                 //let mut planet= houston::create_planet(planet_id, rx_orchestrator, tx_orchestrator, rx_explorer);
                 //let _ = planet.run();

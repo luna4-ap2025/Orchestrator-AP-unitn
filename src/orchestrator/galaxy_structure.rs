@@ -90,6 +90,11 @@ impl GalaxyStructure {
         }
 
         self.adjacency.remove(&planet);
+
+        //log change in galaxy structure
+        log::info!(
+            "New galaxy structure is: {:?}", self.adjacency
+        );
     }
 
     /// Adds a connection between two planets
@@ -104,6 +109,12 @@ impl GalaxyStructure {
             self.adjacency.entry(a).or_default().insert(b);
             self.adjacency.entry(b).or_default().insert(a);
         }
+    }
+
+    ///Adds a connection between two planets without checking
+    pub fn add_connection_unchecked(&mut self, a: ID, b: ID) {
+        self.adjacency.entry(a).or_default().insert(b);
+        self.adjacency.entry(b).or_default().insert(a);
     }
 
     /// Checks if travel is possible from one planet to another
