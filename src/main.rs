@@ -110,12 +110,12 @@ fn load_galaxy_structure() -> Result<Vec<(u32, Vec<u32>)>, Box<dyn std::error::E
             // Default galaxy structure
             println!("no galaxy.txt found, using default hexagonal galaxy");
             Ok(vec![
-                (1, vec![2, 3, 7]),
-                (2, vec![1, 4, 7]),
-                (3, vec![1, 5, 7]),
-                (4, vec![2, 6, 7]),
-                (5, vec![3, 6, 7]),
-                (6, vec![4, 5, 7]),
+                (1, vec![2, 3, 4,5,6,7]),
+                (2, vec![1,3,4,5,6,7]),
+                (3, vec![1,2,4,5,6,7]),
+                (4, vec![1,2,3,5,6,7]),
+                (5, vec![1,2,3,4,6,7]),
+                (6, vec![1,2,3,4,5,7]),
                 (7, vec![1, 2, 3, 4, 5, 6]),
             ])
         }
@@ -205,10 +205,10 @@ fn spawn_planet_thread(
             }
             "the_compiler_strikes_back" => {
                 log::info!("start the_compiler_strikes_back loop [dummy]");
-                dummy_planet_loop(planet_id, rx_orchestrator, tx_orchestrator);
+                //dummy_planet_loop(planet_id, rx_orchestrator, tx_orchestrator);
                 //won't start
-                //let mut planet= the_compiler_strikes_back::create_planet(planet_id, tx_orchestrator, rx_orchestrator, rx_explorer);
-                //let _ = planet.run();//first planet
+                let mut planet= the_compiler_strikes_back::planet::create_planet(rx_orchestrator,tx_orchestrator,rx_explorer, planet_id);
+                let _ = planet.run();//first planet
             }
            "crabtorio" => {
                log::info!("start crabtorio loop");

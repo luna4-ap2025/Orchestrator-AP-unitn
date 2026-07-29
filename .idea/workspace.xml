@@ -14,11 +14,10 @@
     </cargoProject>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="668d04bc-8fc4-424c-8f8d-c6c91eedaeb2" name="Changes" comment="Added logging for phase change">
+    <list default="true" id="668d04bc-8fc4-424c-8f8d-c6c91eedaeb2" name="Changes" comment="improved logging. what is &quot;galaxy mood&quot;">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/main.rs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/orchestrator/galaxy_structure.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/orchestrator/galaxy_structure.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/orchestrator/state.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/orchestrator/state.rs" afterDir="false" />
     </list>
     <list id="c3b1074b-0d0e-4959-a2fd-cc356ffda3f6" name="Changes by hp" comment="" />
     <option name="SHOW_DIALOG" value="false" />
@@ -46,7 +45,7 @@
   <component name="GithubPullRequestsUISettings">{
   &quot;selectedUrlAndAccountId&quot;: {
     &quot;url&quot;: &quot;https://github.com/luna4-ap2025/Orchestrator-AP-unitn.git&quot;,
-    &quot;accountId&quot;: &quot;a3c02860-dc5b-48b5-82df-52096d3065f9&quot;
+    &quot;accountId&quot;: &quot;eae540d1-2bb3-4b5e-813f-5cc3e4328500&quot;
   }
 }</component>
   <component name="MacroExpansionManager">
@@ -82,6 +81,7 @@
     &quot;Cargo.Test test::tests::test_planet_destruction_removes_explorers.executor&quot;: &quot;Run&quot;,
     &quot;Cargo.Test test::tests::test_planet_destruction_removes_explorers_simple.executor&quot;: &quot;Run&quot;,
     &quot;Cargo.Test test::tests::test_send_asteroid_and_sunray.executor&quot;: &quot;Run&quot;,
+    &quot;CidrDebugProfileConversion&quot;: &quot;true&quot;,
     &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
@@ -267,8 +267,6 @@
       <workItem from="1781818102898" duration="540000" />
       <workItem from="1781827441609" duration="1707000" />
       <workItem from="1781829804572" duration="2268000" />
-      <workItem from="1785258172701" duration="149000" />
-      <workItem from="1785263030007" duration="2241000" />
     </task>
     <task id="LOCAL-00001" summary="test">
       <option name="closed" value="true" />

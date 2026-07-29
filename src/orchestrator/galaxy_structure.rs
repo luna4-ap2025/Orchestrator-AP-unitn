@@ -74,27 +74,31 @@ impl GalaxyStructure {
     }
 
     /// Removes a planet from the galaxy
-    pub fn remove_planet(&mut self, planet: ID) {
-        self.alive_planets.remove(&planet);
-
-        // Clona i vicini per evitare E0502
-        let neighbors: Vec<ID> = self.adjacency.get(&planet)
-            .map(|set| set.iter().copied().collect())
-            .unwrap_or_default();
-
-        // Rimuove il pianeta da tutti gli insiemi di adiacenza
-        for neighbor_set in self.adjacency.values_mut() {
-            for neighbor in &neighbors {
-                neighbor_set.remove(neighbor);
-            }
+    pub fn remove_planet(&mut self, id: ID) {
+        self.adjacency.remove(&id);
+        for connections in self.adjacency.values_mut() {
+            connections.remove(&id);
         }
+        self.alive_planets.remove(&id);
 
-        self.adjacency.remove(&planet);
 
         //log change in galaxy structure
         log::info!(
-            "New galaxy structure is: {:?}", self.adjacency
+            "New galaxy structure is: \n{}", self.print()
         );
+    }
+    fn print(&self) -> String {
+        let mut ids: Vec<&ID> = self.adjacency.keys().collect();
+        ids.sort();
+
+        let mut output = String::new();
+        for id in ids {
+            let mut connections: Vec<&ID> = self.adjacency[id].iter().collect();
+            connections.sort();
+            let conn_str = connections.iter().map(|c| c.to_string()).collect::<Vec<_>>().join(", ");
+            output.push_str(&format!("Planet {:>3} -> [{}]\n", id, conn_str));
+        }
+        output
     }
 
     /// Adds a connection between two planets
