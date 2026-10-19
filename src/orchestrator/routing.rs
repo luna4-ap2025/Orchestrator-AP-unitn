@@ -6,7 +6,7 @@
 use crossbeam_channel::unbounded;
 use common_game::protocols::orchestrator_explorer::OrchestratorToExplorer;
 use common_game::protocols::orchestrator_planet::OrchestratorToPlanet;
-use common_game::protocols::planet_explorer::{ExplorerToPlanet, PlanetToExplorer};
+use common_game::protocols::planet_explorer::PlanetToExplorer;
 use common_game::utils::ID;
 
 use crate::orchestrator::Orchestrator;
@@ -35,10 +35,31 @@ pub(crate) fn handle_travel_request(
         );
         return;
     }
+    // Sender the destination planet uses to answer this explorer. Explorers that
+    // did not register a reply channel (the dummy ones) get a throwaway channel,
+    // which is how this function behaved before.
+    let planet_to_explorer_sender = orchestrator
+        .explorer_reply_senders
+        .get(&explorer_id)
+        .cloned()
+        .unwrap_or_else(|| unbounded::<PlanetToExplorer>().0);
 
-    // Create bidirectional communication channels
-    let (planet_to_explorer_sender, _planet_to_explorer_receiver) = unbounded::<PlanetToExplorer>();
-    let (explorer_to_planet_sender, _explorer_to_planet_receiver) = unbounded::<ExplorerToPlanet>();
+    // Sender the explorer will use to talk to the destination planet.
+    let Some(explorer_to_planet_sender) = orchestrator
+        .planet_explorer_senders
+        .get(&to_planet_id)
+        .cloned()
+    else {
+        log::error!("No explorer channel for destination planet {to_planet_id}");
+        send_rejection(
+            orchestrator,
+            explorer_id,
+            from_planet_id,
+            to_planet_id,
+            "Destination planet has no explorer channel",
+        );
+        return;
+    };
 
     // Notify destination planet
     if let Some(dest_tx) = orchestrator.planet_senders.get(&to_planet_id) {

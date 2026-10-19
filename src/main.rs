@@ -377,6 +377,50 @@ fn spawn_explorers(
         println!("explorer {} ({}) on planet {}", explorer_id, name, starting_planet);
     }
 
+    // ---- Eco: the real explorer (individual component) ----
+    let eco_id: u32 = 102;
+    let eco_planet: u32 = 1;
+
+    let (to_eco_tx, to_eco_rx) = unbounded();
+    let (from_eco_tx, from_eco_rx) = unbounded();
+    // planet -> Eco replies travel on this channel
+    let (planet_reply_tx, planet_reply_rx) = unbounded();
+
+    // Eco -> planet: the sender of the starting planet's explorer channel (from step 3a)
+    let eco_to_planet_tx = orchestrator
+        .planet_explorer_senders
+        .get(&eco_planet)
+        .cloned()
+        .ok_or("no explorer channel for Eco's starting planet")?;
+
+    // Register the reply sender so that routing.rs can hand it to the next planet
+    orchestrator.set_explorer_reply_sender(eco_id, planet_reply_tx.clone());
+
+    // Tell the starting planet that Eco has arrived, and give it the reply sender
+    if let Some(planet_tx) = orchestrator.planet_senders.get(&eco_planet) {
+        let _ = planet_tx.send(
+            common_game::protocols::orchestrator_planet::OrchestratorToPlanet::IncomingExplorerRequest {
+                explorer_id: eco_id,
+                new_sender: planet_reply_tx,
+            },
+        );
+    }
+
+    orchestrator.add_explorer(eco_id, to_eco_tx, from_eco_rx, eco_planet)?;
+
+    thread::spawn(move || {
+        let mut eco = explorer_eco::create_explorer(
+            eco_id,
+            eco_planet,
+            to_eco_rx,
+            from_eco_tx,
+            planet_reply_rx,
+            eco_to_planet_tx,
+        );
+        let _ = eco.run();
+    });
+    println!("explorer {eco_id} (eco) on planet {eco_planet}");
+
     Ok(())
 }
 
