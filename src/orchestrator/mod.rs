@@ -19,7 +19,8 @@ pub mod galaxy_structure;
 pub mod galaxy_ai;
 
 /// Main orchestrator entry point.
-pub use orchestrator::Orchestrator;
+pub use orchestrator::{BagContent, Orchestrator};
+
 /// Snapshot of the orchestrator internal state.
 pub use state::SystemState;
 /// Galaxy topology structure.

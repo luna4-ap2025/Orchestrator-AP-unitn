@@ -380,7 +380,7 @@ fn spawn_explorer_thread(
     starting_planet: u32,
     name: String,
     rx_orchestrator: crossbeam_channel::Receiver<common_game::protocols::orchestrator_explorer::OrchestratorToExplorer>,
-    tx_orchestrator: crossbeam_channel::Sender<common_game::protocols::orchestrator_explorer::ExplorerToOrchestrator<common_game::components::resource::GenericResource>>,
+    tx_orchestrator: crossbeam_channel::Sender<common_game::protocols::orchestrator_explorer::ExplorerToOrchestrator<orchestrator::orchestrator::BagContent>>
 ) -> Result<thread::JoinHandle<()>, Box<dyn std::error::Error>> {
     let handle = thread::spawn(move || {
         log::info!("explorer {} ({}) thread started on planet {}", explorer_id, name, starting_planet);
@@ -457,7 +457,12 @@ fn spawn_explorer_thread(
                     // Send a simple response indicating no resources
                     // We can't create GenericResource directly, so we'll indicate an error
                     // or use a workaround
-                    log::warn!("explorer {} received BagContentRequest but cannot create resources in dummy mode", explorer_id);
+                    let _ = tx_orchestrator.send(
+                        common_game::protocols::orchestrator_explorer::ExplorerToOrchestrator::BagContentResponse {
+                            explorer_id,
+                            bag_content: Vec::new(),
+                        }
+                    );
                 }
                 common_game::protocols::orchestrator_explorer::OrchestratorToExplorer::CurrentPlanetRequest => {
                     let _ = tx_orchestrator.send(

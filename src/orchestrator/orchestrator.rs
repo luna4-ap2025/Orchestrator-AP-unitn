@@ -8,7 +8,7 @@ use std::time::{Duration, Instant};
 use crossbeam_channel::{Receiver, Sender, TryRecvError, bounded};
 
 use common_game::components::forge::Forge;
-use common_game::components::resource::GenericResource;
+use common_game::components::resource::BagContent;
 use common_game::protocols::orchestrator_explorer::{
     ExplorerToOrchestrator, OrchestratorToExplorer,
 };
@@ -28,6 +28,9 @@ use super::explorer_control;
 
 //use crate::orchestrator::{planet_control, explorer_control};
 
+/// What an explorer reports for its bag: each resource type with its count.
+pub type BagContent = Vec<(ResourceType, usize)>;
+
 /// Main orchestrator structure that manages the entire simulation.
 pub struct Orchestrator {
     forge: Forge,
@@ -38,7 +41,7 @@ pub struct Orchestrator {
 
     /// Explorer communication channels
     pub explorer_senders: HashMap<ID, Sender<OrchestratorToExplorer>>,
-    explorer_receivers: HashMap<ID, Receiver<ExplorerToOrchestrator<GenericResource>>>,
+    explorer_receivers: HashMap<ID, Receiver<ExplorerToOrchestrator<BagContent>>>,
 
     /// System state
     pub state: SystemState,
@@ -88,7 +91,7 @@ impl Orchestrator {
         planet_senders: HashMap<ID, Sender<OrchestratorToPlanet>>,
         planet_receivers: HashMap<ID, Receiver<PlanetToOrchestrator>>,
         explorer_senders: HashMap<ID, Sender<OrchestratorToExplorer>>,
-        explorer_receivers: HashMap<ID, Receiver<ExplorerToOrchestrator<GenericResource>>>,
+        explorer_receivers: HashMap<ID, Receiver<ExplorerToOrchestrator<BagContent>>>,
         galaxy_structure_file: String,
     ) -> Result<Self, String> {
         let forge = Forge::new().map_err(|e| format!("Failed to create forge: {e}"))?;
@@ -136,7 +139,7 @@ impl Orchestrator {
         &mut self,
         explorer_id: ID,
         to_explorer_tx: Sender<OrchestratorToExplorer>,
-        from_explorer_rx: Receiver<ExplorerToOrchestrator<GenericResource>>,
+        from_explorer_rx: Receiver<ExplorerToOrchestrator<BagContent>>,
         planet_id: ID,
     ) -> Result<(), String> {
         if !self.state.is_planet_alive(planet_id) {

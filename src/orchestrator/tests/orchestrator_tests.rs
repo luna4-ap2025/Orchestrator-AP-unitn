@@ -2,7 +2,7 @@
 
 use crossbeam_channel::bounded;
 
-use common_game::components::resource::GenericResource;
+use common_game::components::resource::BagContent;
 use common_game::protocols::orchestrator_explorer::{
     ExplorerToOrchestrator, OrchestratorToExplorer,
 };
@@ -12,6 +12,7 @@ use common_game::protocols::orchestrator_planet::{
 use common_game::utils::ID;
 
 use orchestrator::Orchestrator;
+use crate::orchestrator::BagContent;
 
 // ==================== Helper Functions ====================
 
@@ -34,11 +35,11 @@ fn add_test_explorer(
     planet_id: ID,
 ) -> (
     crossbeam_channel::Receiver<OrchestratorToExplorer>,
-    crossbeam_channel::Sender<ExplorerToOrchestrator<GenericResource>>,
+    crossbeam_channel::Sender<ExplorerToOrchestrator<BagContent>>,
 ) {
     let (to_explorer_tx, to_explorer_rx) = bounded::<OrchestratorToExplorer>(10);
     let (from_explorer_tx, from_explorer_rx) =
-        bounded::<ExplorerToOrchestrator<GenericResource>>(10);
+        bounded::<ExplorerToOrchestrator<BagContent>>(10);
 
     orchestrator
         .add_explorer(explorer_id, to_explorer_tx, from_explorer_rx, planet_id)
@@ -149,7 +150,7 @@ fn test_add_explorer_to_dead_planet_fails() {
     let explorer_id = ID::from(42u32);
 
     let (to_explorer_tx, _) = bounded::<OrchestratorToExplorer>(10);
-    let (_, from_explorer_rx) = bounded::<ExplorerToOrchestrator<GenericResource>>(10);
+    let (_, from_explorer_rx) = bounded::<ExplorerToOrchestrator<BagContent>>(10);
 
     let result = orchestrator.add_explorer(
         explorer_id,

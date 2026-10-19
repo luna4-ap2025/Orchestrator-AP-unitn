@@ -4,18 +4,19 @@
 //! explorer-related operations like movement, resource requests, and
 //! AI control.
 
-use common_game::components::resource::GenericResource;
+
 use common_game::protocols::orchestrator_explorer::ExplorerToOrchestrator;
 use common_game::utils::ID;
 
 use crate::orchestrator::Orchestrator;
 use super::routing;
+use super::BagContent;
 
 /// Handles incoming messages from an explorer.
 pub(crate) fn handle_explorer_msg(
     orchestrator: &mut Orchestrator,
     explorer_id: ID,
-    msg: ExplorerToOrchestrator<GenericResource>,
+    msg: ExplorerToOrchestrator<BagContent>,
 ) {
     match msg {
         ExplorerToOrchestrator::TravelToPlanetRequest {
@@ -140,21 +141,20 @@ fn handle_neighbors_request(
 fn handle_bag_content_response(
     orchestrator: &mut Orchestrator,
     explorer_id: ID,
-    _bag_content: GenericResource,
-) {
-    // TODO: Compute actual bag count from bag_content
-    let estimated_bag_count = 1;
+    bag_content: BagContent,)
+{
+    let bag_count: usize = bag_content.iter().map(|(_, n)| *n).sum();
 
     if let Some(stats) = orchestrator.state.explorer_stats(explorer_id) {
         let mut updated_stats = stats.clone();
-        updated_stats.bag_count = estimated_bag_count;
-
+        updated_stats.bag_count = bag_count;
         orchestrator.state.update_explorer_stats(explorer_id, updated_stats);
     }
 
     let _ = orchestrator.gui_event_sender.send(
         crate::orchestrator::gui_interface::GuiEvent::ExplorerBagUpdated(explorer_id)
     );
+
 }
 
 /// Handles supported resource result from an explorer.
