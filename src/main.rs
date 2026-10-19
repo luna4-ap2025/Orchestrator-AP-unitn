@@ -388,9 +388,7 @@ fn spawn_explorers(
 
     // Eco -> planet: the sender of the starting planet's explorer channel (from step 3a)
     let eco_to_planet_tx = orchestrator
-        .planet_explorer_senders
-        .get(&eco_planet)
-        .cloned()
+        .planet_explorer_sender(eco_planet)
         .ok_or("no explorer channel for Eco's starting planet")?;
 
     // Register the reply sender so that routing.rs can hand it to the next planet
@@ -409,7 +407,7 @@ fn spawn_explorers(
     orchestrator.add_explorer(eco_id, to_eco_tx, from_eco_rx, eco_planet)?;
 
     thread::spawn(move || {
-        let mut eco = explorer_eco::create_explorer(
+        let eco = explorer_eco::create_explorer(
             eco_id,
             eco_planet,
             to_eco_rx,

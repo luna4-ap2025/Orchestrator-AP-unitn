@@ -150,11 +150,17 @@ impl Orchestrator {
         self.planet_explorer_senders.insert(planet_id, tx);
     }
 
+    /// Returns a clone of the sender that lets an explorer talk to `planet_id`,
+    /// or `None` if that planet has no explorer channel.
+    pub fn planet_explorer_sender(&self, planet_id: ID) -> Option<Sender<ExplorerToPlanet>> {
+        self.planet_explorer_senders.get(&planet_id).cloned()
+    }
+
     /// Remembers the sender planets use to answer `explorer_id`.
     pub fn set_explorer_reply_sender(&mut self, explorer_id: ID, tx: Sender<PlanetToExplorer>) {
         self.explorer_reply_senders.insert(explorer_id, tx);
     }
-    
+
 
     pub fn add_explorer(
         &mut self,
