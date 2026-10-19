@@ -8,7 +8,6 @@ use std::time::{Duration, Instant};
 use crossbeam_channel::{Receiver, Sender, TryRecvError, bounded};
 
 use common_game::components::forge::Forge;
-use common_game::components::resource::BagContent;
 use common_game::protocols::orchestrator_explorer::{
     ExplorerToOrchestrator, OrchestratorToExplorer,
 };
