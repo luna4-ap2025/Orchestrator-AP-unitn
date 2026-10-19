@@ -149,6 +149,8 @@ fn spawn_all_planets(
         let (to_planet_tx, to_planet_rx) = unbounded();
         let (from_planet_tx, from_planet_rx) = unbounded();
 
+        let (explorer_to_planet_tx, explorer_to_planet_rx) = unbounded::<common_game::protocols::planet_explorer::ExplorerToPlanet>();
+
         // Spawn planet thread (using appropriate crate or fallback)
         spawn_planet_thread(
             planet_id,
@@ -156,10 +158,13 @@ fn spawn_all_planets(
             neighbors.clone(),
             to_planet_rx,
             from_planet_tx,
+            explorer_to_planet_rx,
         )?;
 
         // Add to orchestrator
         orchestrator.add_planet(planet_id, to_planet_tx, from_planet_rx)?;
+
+        orchestrator.set_planet_explorer_sender(planet_id, explorer_to_planet_tx);
 
         // Add adjacency to state
         for &neighbor in neighbors {
@@ -170,6 +175,7 @@ fn spawn_all_planets(
     }
 
     Ok(())
+
 }
 
 fn spawn_planet_thread(
@@ -178,14 +184,13 @@ fn spawn_planet_thread(
     neighbors: Vec<u32>,
     rx_orchestrator: crossbeam_channel::Receiver<common_game::protocols::orchestrator_planet::OrchestratorToPlanet>,
     tx_orchestrator: crossbeam_channel::Sender<common_game::protocols::orchestrator_planet::PlanetToOrchestrator>,
+    rx_explorer: crossbeam_channel::Receiver<common_game::protocols::planet_explorer::ExplorerToPlanet>,
 ) -> Result<thread::JoinHandle<()>, Box<dyn std::error::Error>> {
     let repo_name = repo_name.to_string();
 
     let handle = thread::spawn(move || {
         log::info!("planet {} ({}) thread started", planet_id, repo_name);
 
-        // Create explorer channel
-        let (_, rx_explorer) = unbounded::<common_game::protocols::planet_explorer::ExplorerToPlanet>();
         //planet logic
         match repo_name.as_str() {
             "orbitron" => {

@@ -5,6 +5,8 @@ use std::sync::atomic::{AtomicBool, Ordering};
 use std::sync::Arc;
 use std::time::{Duration, Instant};
 
+use common_game::protocols::planet_explorer::{ExplorerToPlanet, PlanetToExplorer};
+
 use crossbeam_channel::{Receiver, Sender, TryRecvError, bounded};
 
 use common_game::components::forge::Forge;
@@ -59,6 +61,11 @@ pub struct Orchestrator {
 
     /// Cycle duration
     pub(crate) cycle_duration_in_millis: u64,
+
+    /// Sender every explorer uses to talk to a given planet (the planet owns the receiver).
+    pub(crate) planet_explorer_senders: HashMap<ID, Sender<ExplorerToPlanet>>,
+    /// Sender each planet uses to answer a given explorer (the explorer owns the receiver).
+    pub(crate) explorer_reply_senders: HashMap<ID, Sender<PlanetToExplorer>>,
 }
 
 impl Orchestrator {
@@ -82,6 +89,8 @@ impl Orchestrator {
             galaxy_ai: GalaxyAI::new_inactive(),
             should_stop: Arc::new(AtomicBool::new(false)),
             cycle_duration_in_millis: 500,
+            planet_explorer_senders: HashMap::new(),
+            explorer_reply_senders: HashMap::new(),
         })
     }
 
@@ -111,6 +120,8 @@ impl Orchestrator {
             galaxy_ai: GalaxyAI::new_active(),
             should_stop: Arc::new(AtomicBool::new(false)),
             cycle_duration_in_millis: 500,
+            planet_explorer_senders: HashMap::new(),
+            explorer_reply_senders: HashMap::new(),
         })
     }
 
@@ -133,6 +144,17 @@ impl Orchestrator {
         let _ = self.gui_event_sender.send(GuiEvent::PlanetAdded(planet_id));
         Ok(())
     }
+
+    /// Remembers the sender explorers use to reach `planet_id`.
+    pub fn set_planet_explorer_sender(&mut self, planet_id: ID, tx: Sender<ExplorerToPlanet>) {
+        self.planet_explorer_senders.insert(planet_id, tx);
+    }
+
+    /// Remembers the sender planets use to answer `explorer_id`.
+    pub fn set_explorer_reply_sender(&mut self, explorer_id: ID, tx: Sender<PlanetToExplorer>) {
+        self.explorer_reply_senders.insert(explorer_id, tx);
+    }
+    
 
     pub fn add_explorer(
         &mut self,
