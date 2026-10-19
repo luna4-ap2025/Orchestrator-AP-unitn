@@ -16,6 +16,7 @@ use common_game::protocols::orchestrator_planet::{
     OrchestratorToPlanet, PlanetToOrchestrator,
 };
 use common_game::utils::ID;
+use common_game::components::resource::ResourceType;
 
 use crate::orchestrator::state::SystemState;
 use crate::orchestrator::gui_interface::{GuiEvent, GuiState, GuiCommand};
