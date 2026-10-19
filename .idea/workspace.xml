@@ -14,8 +14,10 @@
     </cargoProject>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="668d04bc-8fc4-424c-8f8d-c6c91eedaeb2" name="Changes" comment="improved logging. what is &quot;galaxy mood&quot;">
+    <list default="true" id="668d04bc-8fc4-424c-8f8d-c6c91eedaeb2" name="Changes" comment="compiler strikes back&#10;removal of planets bug and logging">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Cargo.lock" beforeDir="false" afterPath="$PROJECT_DIR$/Cargo.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Cargo.toml" beforeDir="false" afterPath="$PROJECT_DIR$/Cargo.toml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/main.rs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/orchestrator/galaxy_structure.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/orchestrator/galaxy_structure.rs" afterDir="false" />
     </list>
@@ -502,7 +504,8 @@
     <MESSAGE value="2 not working planets rest working" />
     <MESSAGE value="improved logging. what is &quot;mood&quot;" />
     <MESSAGE value="improved logging. what is &quot;galaxy mood&quot;" />
-    <option name="LAST_COMMIT_MESSAGE" value="improved logging. what is &quot;galaxy mood&quot;" />
+    <MESSAGE value="compiler strikes back&#10;removal of planets bug and logging" />
+    <option name="LAST_COMMIT_MESSAGE" value="compiler strikes back&#10;removal of planets bug and logging" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

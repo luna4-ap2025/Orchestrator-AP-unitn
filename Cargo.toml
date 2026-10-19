@@ -32,7 +32,7 @@ enterprise = { git = "https://github.com/Thompspsps/Enterprise_planet.git", opti
 
 # ========== Explorers as Dependencies ==========
 explorer-viviana = { git = "https://github.com/vivis2kuni/explorer_viviana.git", package = "explorer_astronaut", optional = true }
-
+explorer-trisha={git="https://github.com/appoject/explorer-1-trisha-.git", package = "explorer-1-trisha-", optional = true}
 # ========== GUI Dependencies (OPTIONAL) ==========
 bevy = { version = "0.13", optional = true }
 bevy_egui = { version = "0.25", optional = true }
@@ -42,7 +42,7 @@ chrono = "0.4.43"
 [features]
 default = ["all-planets", "all-explorers"]
 all-planets = ["orbitron", "skycartel", "rustrelli", "the-compiler-strikes-back", "crabtorio", "houston", "enterprise"]
-all-explorers = ["explorer-viviana"]
+all-explorers = ["explorer-viviana","explorer-trisha"]
 gui = ["bevy", "bevy_egui"]
 
 [[bin]]

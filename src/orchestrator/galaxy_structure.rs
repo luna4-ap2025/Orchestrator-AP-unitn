@@ -96,7 +96,7 @@ impl GalaxyStructure {
             let mut connections: Vec<&ID> = self.adjacency[id].iter().collect();
             connections.sort();
             let conn_str = connections.iter().map(|c| c.to_string()).collect::<Vec<_>>().join(", ");
-            output.push_str(&format!("Planet {:>3} -> [{}]\n", id, conn_str));
+            output.push_str(&format!("P {:>3} -> [{}]\n", id, conn_str));
         }
         output
     }
